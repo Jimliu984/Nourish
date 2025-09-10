@@ -21,9 +21,14 @@
   --color-chart-3: var(--chart-3);
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
+  --color-recipe-card: var(--recipe-card);
+  --color-recipe-hover: var(--recipe-hover);
+  --color-meal-slot: var(--meal-slot);
+  --color-meal-slot-hover: var(--meal-slot-hover);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
@@ -31,12 +36,21 @@
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
+  --color-primary-foreground-glow: var(--primary-foreground-glow);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-gradient-primary: var(--gradient-primary);
+  --color-gradient-accent: var(--gradient-accent);
+  --color-gradient-surface: var(--gradient-surface);
+  --color-shadow-soft: var(--shadow-soft);
+  --color-shadow-card: var(--shadow-card);
+  --color-shadow-hover: var(--shadow-hover);
+  --color-transition-smooth: var(--transition-smooth);
+  --color-transition-bounce: var(--transition-bounce);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -45,50 +59,50 @@
 
 :root {
     /* Background and surface colors */
-    --background: 45 20% 97%;
-    --foreground: 25 25% 15%;
+    --background: hsl(45 20% 97%);
+    --foreground: hsl(25 25% 15%);
 
-    --card: 40 30% 99%;
-    --card-foreground: 25 25% 15%;
+    --card: hsl(40 30% 99%);
+    --card-foreground: hsl(25 25% 15%);
 
-    --popover: 40 30% 99%;
-    --popover-foreground: 25 25% 15%;
+    --popover: hsl(40 30% 99%);
+    --popover-foreground: hsl(25 25% 15%);
 
     /* Brand colors - Sage green primary */
-    --primary: 95 25% 45%;
-    --primary-foreground: 45 20% 97%;
-    --primary-glow: 95 35% 55%;
+    --primary: hsl(95 25% 45%);
+    --primary-foreground: hsl(45 20% 97%);
+    --primary-glow: hsl(95 35% 55%);
 
     /* Secondary - Warm orange accent */
-    --secondary: 25 85% 88%;
-    --secondary-foreground: 25 60% 25%;
+    --secondary: hsl(25 85% 88%);
+    --secondary-foreground: hsl(25 60% 25%);
 
     /* Muted tones */
-    --muted: 45 15% 92%;
-    --muted-foreground: 25 20% 45%;
+    --muted: hsl(45 15% 92%);
+    --muted-foreground: hsl(25 20% 45%);
 
     /* Accent - Warm terracotta */
-    --accent: 15 65% 75%;
-    --accent-foreground: 25 40% 20%;
+    --accent: hsl(15 65% 75%);
+    --accent-foreground: hsl(25 40% 20%);
 
     /* Destructive */
-    --destructive: 0 75% 60%;
-    --destructive-foreground: 45 20% 97%;
+    --destructive: hsl(0 75% 60%);
+    --destructive-foreground: hsl(45 20% 97%);
 
     /* Borders and inputs */
-    --border: 45 15% 88%;
-    --input: 45 15% 88%;
-    --ring: 95 25% 45%;
+    --border: hsl(45 15% 88%);
+    --input: hsl(45 15% 88%);
+    --ring: hsl(95 25% 45%);
 
     /* Design tokens */
     --radius: 0.75rem;
 
     /* Custom food prep tokens */
-    --recipe-card: 40 35% 98%;
-    --recipe-hover: 95 20% 95%;
-    --meal-slot: 45 25% 95%;
-    --meal-slot-hover: 45 30% 92%;
-    
+    --recipe-card: hsl(40 35% 98%);
+    --recipe-hover: hsl(95 20% 95%);
+    --meal-slot: hsl(45 25% 95%);
+    --meal-slot-hover: hsl(45 30% 92%);
+
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
     --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--secondary)));
@@ -105,41 +119,41 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: hsl(222.2 84% 4.9%);
+    --foreground: hsl(210 40% 98%);
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: hsl(222.2 84% 4.9%);
+    --card-foreground: hsl(210 40% 98%);
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: hsl(222.2 84% 4.9%);
+    --popover-foreground: hsl(210 40% 98%);
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: hsl(210 40% 98%);
+    --primary-foreground: hsl(222.2 47.4% 11.2%);
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: hsl(217.2 32.6% 17.5%);
+    --secondary-foreground: hsl(210 40% 98%);
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: hsl(217.2 32.6% 17.5%);
+    --muted-foreground: hsl(215 20.2% 65.1%);
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: hsl(217.2 32.6% 17.5%);
+    --accent-foreground: hsl(210 40% 98%);
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: hsl(0 62.8% 30.6%);
+    --destructive-foreground: hsl(210 40% 98%);
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: hsl(217.2 32.6% 17.5%);
+    --input: hsl(217.2 32.6% 17.5%);
+    --ring: hsl(212.7 26.8% 83.9%);
+    --sidebar-background: hsl(240 5.9% 10%);
+    --sidebar-foreground: hsl(240 4.8% 95.9%);
+    --sidebar-primary: hsl(224.3 76.3% 48%);
+    --sidebar-primary-foreground: hsl(0 0% 100%);
+    --sidebar-accent: hsl(240 3.7% 15.9%);
+    --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+    --sidebar-border: hsl(240 3.7% 15.9%);
+    --sidebar-ring: hsl(217.2 91.2% 59.8%);
   }
 
 @layer base {
@@ -149,4 +163,47 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
 }

@@ -15,3 +15,29 @@ datasource db {
 }
 
 ///// Database models /////
+model Recipe {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  ingredients String
+  instructions String
+  tags        RecipeTag[] @relation("RecipeTags")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Tag {
+  id      Int        @id @default(autoincrement())
+  name    String     @unique
+  color   String
+  recipes RecipeTag[] @relation("RecipeTags")
+}
+
+model RecipeTag {
+  recipe   Recipe @relation("RecipeTags", fields: [recipeId], references: [id])
+  recipeId Int
+  tag      Tag    @relation("RecipeTags", fields: [tagId], references: [id])
+  tagId    Int
+
+  @@id([recipeId, tagId]) // composite key ensures uniqueness
+}
