@@ -27,11 +27,12 @@ export default function WeeklyPlanner() {
 
   return (
     <>
-      <div className="flex items-center min-w-screen justify-center px-30 py-6 space-x-2">
+      <div className="flex items-center min-w-screen justify-center px-30 space-x-2 space-y-6">
         <Calendar className="h-8 w-8 text-primary" />
         <h1 className="text-3xl justify-start flex flex-1 font-bold text-foreground">
           Weekly Meal Plan
         </h1>
+        <div className="flex space-x-2 items-center">
         <Button
           variant="outline"
           className="justify-end flex"
@@ -40,6 +41,7 @@ export default function WeeklyPlanner() {
           {showWeekend ? "Hide Weekend" : "Show Weekend"}
         </Button>
         <ShoppingListDialog />
+        </div>
       </div>
       <div className="space-y-6">
         {displayDays.map((day) => (

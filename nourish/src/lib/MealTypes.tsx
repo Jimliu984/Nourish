@@ -18,4 +18,18 @@ interface RecipeOverview {
   servings: number;
 }
 
-export type { Meal, DayMeals, RecipeOverview };
+interface Recipe {
+  id: string;
+  name: string;
+  type: 'breakfast' | 'lunch' | 'dinner' | 'snack';
+  ingredients: string[];
+  instructions: string[];
+  cookTime: number;
+  servings: number;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  description: string;
+  tags: string[];
+  isFavorite: boolean;
+}
+
+export type { Meal, DayMeals, RecipeOverview, Recipe };
