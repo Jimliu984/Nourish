@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Meal } from "@/lib/MealTypes";
+import { Meal } from "@/lib/types";
 
 interface MealListItemsProps {
   meals: Meal[];

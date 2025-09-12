@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Ingredient } from '@/lib/types';
 import { Clock, Users } from 'lucide-react';
 import React from 'react';
 
@@ -7,7 +8,7 @@ type RecipeDialogCardProps = {
     title: string;
     prepTime: number;
     servings: number;
-    ingredients: string[];
+    ingredients: Ingredient[];
 };
 
 const AddRecipeDialogCard: React.FC<RecipeDialogCardProps> = ({
@@ -37,9 +38,9 @@ const AddRecipeDialogCard: React.FC<RecipeDialogCardProps> = ({
                   
                   {ingredients && (
                     <div className="flex flex-wrap gap-1">
-                      {ingredients.slice(0, 4).map(ingredient => (
-                        <Badge key={ingredient} variant="secondary" className="text-xs">
-                          {ingredient}
+                      {ingredients.slice(0, 4).map((ingredient, index) => (
+                        <Badge key={index} variant="secondary" className="text-xs">
+                          {ingredient.name}
                         </Badge>
                       ))}
                       {ingredients.length > 4 && (

@@ -1,7 +1,7 @@
 interface Meal {
   id: string;
   name: string;
-  type: "breakfast" | "lunch" | "dinner" | "snack";
+  type: 'any' | "breakfast" | "lunch" | "dinner" | "snack";
   ingredients?: string[];
 }
 
@@ -18,11 +18,16 @@ interface RecipeOverview {
   servings: number;
 }
 
+type Ingredient = {
+  name : string;
+  quantity : string;
+}
+
 interface Recipe {
-  id: string;
+  id: number;
   name: string;
-  type: 'breakfast' | 'lunch' | 'dinner' | 'snack';
-  ingredients: string[];
+  type: 'any' | 'breakfast' | 'lunch' | 'dinner' | 'snack';
+  ingredients: Ingredient[];
   instructions: string[];
   cookTime: number;
   servings: number;
@@ -32,4 +37,4 @@ interface Recipe {
   isFavorite: boolean;
 }
 
-export type { Meal, DayMeals, RecipeOverview, Recipe };
+export type { Meal, DayMeals, RecipeOverview, Recipe, Ingredient};

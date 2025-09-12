@@ -7,11 +7,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { RecipeOverview } from "@/lib/MealTypes";
 import { Plus, Search } from "lucide-react";
 import { useState } from "react";
 import RecipeTag from "./RecipeTag";
 import AddRecipeDialogCard from "./AddRecipeDialogCard";
+import { SAMPLE_RECIPES } from "@/lib/FakeData";
 
 interface AddRecipeDialogProps {
   mealType?: string;
@@ -19,56 +19,56 @@ interface AddRecipeDialogProps {
 }
 const availableTags = ['Quick', 'Healthy', 'Vegetarian', 'High Protein', 'Low Carb'];
 
-const SAMPLE_RECIPES: RecipeOverview[] = [
-  {
-    id: 1,
-    name: 'Overnight Oats',
-    type: 'breakfast',
-    ingredients: ['Oats', 'Milk', 'Chia seeds', 'Honey', 'Berries'],
-    cookTime: 5,
-    servings: 1
-  },
-  {
-    id: 2,
-    name: 'Grilled Chicken Salad',
-    type: 'lunch',
-    ingredients: ['Chicken breast', 'Mixed greens', 'Tomatoes', 'Cucumber', 'Olive oil'],
-    cookTime: 20,
-    servings: 2
-  },
-  {
-    id: 3,
-    name: 'Salmon with Quinoa',
-    type: 'dinner',
-    ingredients: ['Salmon fillet', 'Quinoa', 'Broccoli', 'Lemon', 'Garlic'],
-    cookTime: 25,
-    servings: 2
-  },
-  {
-    id: 4,
-    name: 'Greek Yogurt Parfait',
-    type: 'breakfast',
-    ingredients: ['Greek yogurt', 'Granola', 'Berries', 'Honey'],
-    cookTime: 2,
-    servings: 1
-  },
-  {
-    id: 5,
-    name: 'Turkey & Avocado Wrap',
-    type: 'lunch',
-    ingredients: ['Turkey slices', 'Avocado', 'Spinach', 'Tomato', 'Whole wheat tortilla'],
-    cookTime: 5,
-    servings: 1
-  },
-  {
-    id: 6,
-    name: 'Stir-fry Vegetables',
-    type: 'dinner',
-    ingredients: ['Mixed vegetables', 'Soy sauce', 'Ginger', 'Garlic', 'Rice'],
-    cookTime: 15,
-    servings: 3
-  }
-];
+// const SAMPLE_RECIPES: RecipeOverview[] = [
+//   {
+//     id: 1,
+//     name: 'Overnight Oats',
+//     type: 'breakfast',
+//     ingredients: ['Oats', 'Milk', 'Chia seeds', 'Honey', 'Berries'],
+//     cookTime: 5,
+//     servings: 1
+//   },
+//   {
+//     id: 2,
+//     name: 'Grilled Chicken Salad',
+//     type: 'lunch',
+//     ingredients: ['Chicken breast', 'Mixed greens', 'Tomatoes', 'Cucumber', 'Olive oil'],
+//     cookTime: 20,
+//     servings: 2
+//   },
+//   {
+//     id: 3,
+//     name: 'Salmon with Quinoa',
+//     type: 'dinner',
+//     ingredients: ['Salmon fillet', 'Quinoa', 'Broccoli', 'Lemon', 'Garlic'],
+//     cookTime: 25,
+//     servings: 2
+//   },
+//   {
+//     id: 4,
+//     name: 'Greek Yogurt Parfait',
+//     type: 'breakfast',
+//     ingredients: ['Greek yogurt', 'Granola', 'Berries', 'Honey'],
+//     cookTime: 2,
+//     servings: 1
+//   },
+//   {
+//     id: 5,
+//     name: 'Turkey & Avocado Wrap',
+//     type: 'lunch',
+//     ingredients: ['Turkey slices', 'Avocado', 'Spinach', 'Tomato', 'Whole wheat tortilla'],
+//     cookTime: 5,
+//     servings: 1
+//   },
+//   {
+//     id: 6,
+//     name: 'Stir-fry Vegetables',
+//     type: 'dinner',
+//     ingredients: ['Mixed vegetables', 'Soy sauce', 'Ginger', 'Garlic', 'Rice'],
+//     cookTime: 15,
+//     servings: 3
+//   }
+// ];
 
 export default function AddRecipeDialog({ mealType, children }: AddRecipeDialogProps) {
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -84,7 +84,7 @@ export default function AddRecipeDialog({ mealType, children }: AddRecipeDialogP
       <DialogTrigger>
         {children}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] min-w-[45vh] md:min-w-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Plus className="h-5 w-5 text-primary" />
@@ -106,7 +106,10 @@ export default function AddRecipeDialog({ mealType, children }: AddRecipeDialogP
             <RecipeTag tagName={tag} toggleTag={toggleTag} selectedTags={selectedTags} key={tag}  />
           ))}
         </div>
-        <AddRecipeDialogCard title="Recipe 1" servings={5} prepTime={120} ingredients={["chicken", "mushroom", "rice", "soy sauce", "seaweed", "sesame"]} />
+        {SAMPLE_RECIPES.map((recipe) => (
+          <AddRecipeDialogCard key={recipe.id} title={recipe.name} servings={recipe.servings} prepTime={recipe.cookTime} ingredients={recipe.ingredients} />
+        ))}
+        {/* <AddRecipeDialogCard title="Recipe 1" servings={5} prepTime={120} ingredients={["chicken", "mushroom", "rice", "soy sauce", "seaweed", "sesame"]} /> */}
       </DialogContent>
     </Dialog>
   );

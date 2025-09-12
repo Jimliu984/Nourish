@@ -20,7 +20,6 @@ export default function RecipesPage() {
         <RecipeCard key={recipe.id} recipe={recipe} />
       ))}
       </div>
-
     </div>
   );
 }

@@ -44,7 +44,7 @@ type AddRecipeFormValues = {
   isFavorite: boolean;
 };
 
-export default function AddNewRecipeDialog() {
+export default function EditRecipeDialog() {
   const [isOpen, setIsOpen] = useState(false);
   function handleOpenChange(open: boolean) {
     setIsOpen(open);
@@ -80,6 +80,7 @@ function AddNewRecipeForm({
       ingredients: [],
       instructions: [],
       description: "",
+      isFavorite: false,
       tags: [],
     },
   });

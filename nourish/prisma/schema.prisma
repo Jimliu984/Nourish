@@ -18,10 +18,15 @@ datasource db {
 model Recipe {
   id          Int         @id @default(autoincrement())
   name        String
+  mealType    Int
+  cookTime    Int
+  servings    Int
+  difficulty  String
   description String?
-  ingredients String
-  instructions String
+  ingredients String      // JSON String
+  instructions String     // JSON string
   tags        RecipeTag[] @relation("RecipeTags")
+  isFavourite   Boolean
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }
@@ -40,4 +45,16 @@ model RecipeTag {
   tagId    Int
 
   @@id([recipeId, tagId]) // composite key ensures uniqueness
+}
+
+model WeekRecipePlan {
+  id          Int         @id @default(autoincrement())
+  startDate   String      @unique
+  monday      Int
+  tuesday     Int
+  wednesday   Int
+  thursday    Int
+  friday      Int
+  saturday    Int
+  sunday      Int
 }

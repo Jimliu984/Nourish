@@ -8,7 +8,7 @@ import ShoppingListDialog from "./ShoppingListDialog";
 import AddRecipeDialog from "./AddRecipeDialog";
 import ShowRecipeAdded from "./ShowRecipeAdded";
 import MealListItems from "./MealListItems";
-import { Meal } from "@/lib/MealTypes";
+import { Meal } from "@/lib/types";
 const MEAL_TYPES = ["breakfast", "lunch", "dinner"];
 const DAYS = [
   "Monday",

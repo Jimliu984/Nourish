@@ -2,20 +2,21 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { DIFFICULTY_COLORS } from "@/lib/Constants";
-import { Recipe } from "@/lib/MealTypes";
+import { Recipe } from "@/lib/types";
 import { Clock, Heart, Users } from "lucide-react";
+import Link from "next/link";
 
 interface RecipeCardProps {
     recipe: Recipe;
 }
 
 export default function RecipeCard({ recipe } : RecipeCardProps) {
+  const urlName = `${recipe.id}-${recipe.name.toLowerCase().split(" ").join("-")}`
   return (
     <Card
       className="p-6 bg-recipe-card border-border/30 hover:bg-recipe-hover hover:shadow-hover transition-all duration-200"
     >
       <div className="space-y-4">
-        {/* Header */}
         <div className="flex justify-between items-start">
           <div>
             <h3 className="font-semibold text-lg text-foreground mb-1">
@@ -37,14 +38,12 @@ export default function RecipeCard({ recipe } : RecipeCardProps) {
           </Button>
         </div>
 
-        {/* Description */}
         {recipe.description && (
           <p className="text-sm text-muted-foreground line-clamp-2">
             {recipe.description}
           </p>
         )}
 
-        {/* Metadata */}
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Clock className="h-3 w-3" />
@@ -59,15 +58,14 @@ export default function RecipeCard({ recipe } : RecipeCardProps) {
           </Badge>
         </div>
 
-        {/* Ingredients Preview */}
         <div className="space-y-2">
           <span className="text-xs font-medium text-muted-foreground">
             Ingredients:
           </span>
           <div className="flex flex-wrap gap-1">
-            {recipe.ingredients.slice(0, 3).map((ingredient) => (
-              <Badge key={ingredient} variant="secondary" className="text-xs">
-                {ingredient}
+            {recipe.ingredients.slice(0, 3).map((ingredient, index) => (
+              <Badge key={index} variant="secondary" className="text-xs">
+                {ingredient.name}
               </Badge>
             ))}
             {recipe.ingredients.length > 3 && (
@@ -78,7 +76,6 @@ export default function RecipeCard({ recipe } : RecipeCardProps) {
           </div>
         </div>
 
-        {/* Tags */}
         <div className="flex flex-wrap gap-1">
           {recipe.tags.slice(0, 3).map((tag) => (
             <Badge key={tag} variant="outline" className="text-xs">
@@ -87,14 +84,14 @@ export default function RecipeCard({ recipe } : RecipeCardProps) {
           ))}
         </div>
 
-        {/* Action Button */}
-        <Button
+        <Link href={`/recipes/${urlName}`}>
+          <Button
           variant="recipe"
           className="w-full"
-        //   onClick={() => handleViewRecipe(recipe.id)}
         >
           View Recipe
-        </Button>
+          </Button>
+        </Link>
       </div>
     </Card>
   );
