@@ -26,7 +26,7 @@ type Ingredient = {
 interface Recipe {
   id: number;
   name: string;
-  type: 'any' | 'breakfast' | 'lunch' | 'dinner' | 'snack';
+  type: 'any' | 'breakfast' | 'lunch' | 'dinner' | 'snack' | 'dessert';
   ingredients: Ingredient[];
   instructions: string[];
   cookTime: number;
@@ -37,4 +37,21 @@ interface Recipe {
   isFavorite: boolean;
 }
 
-export type { Meal, DayMeals, RecipeOverview, Recipe, Ingredient};
+interface DailyMeals {
+  breakfast: number[];
+  lunch: number[];
+  dinner: number[];
+}
+
+interface WeekPlan {
+  startDate: string;
+  monday: DailyMeals;
+  tuesday: DailyMeals;
+  wednesday: DailyMeals;
+  thursday: DailyMeals;
+  friday: DailyMeals;
+  saturday: DailyMeals;
+  sunday: DailyMeals;
+}
+
+export type { Meal, DayMeals, RecipeOverview, Recipe, Ingredient, WeekPlan};

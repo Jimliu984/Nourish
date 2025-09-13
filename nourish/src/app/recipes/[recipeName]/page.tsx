@@ -1,3 +1,4 @@
+import FavouriteButton from "@/app/components/recipes/FavouriteButton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,17 +15,18 @@ export default async function ViewRecipePage({
 }) {
   const { recipeName } = await params;
   const recipe = SAMPLE_RECIPES[Number.parseInt(recipeName.split("-")[0])-1];
-
   // API call to get Recipe by name here, or pass recipe through since recipe info already rendered on previous page
   return (
     <div className="flex flex-col items-start min-w-screen justify-center px-30 py-6 space-x-2 space-y-6">
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 w-full">
+        <div className="flex">
         <h1 className="text-3xl justify-start flex flex-1 font-bold text-foreground">
           {recipe.name}
         </h1>
+        </div>
         <div className="justify-end flex">
-          <Button>Add</Button>
-          <Button>Add</Button>
+            <FavouriteButton isFavorite={recipe.isFavorite} />
+            <Button>Add</Button>
           <Button>Add</Button>
         </div>
       </div>
@@ -114,7 +116,7 @@ function RecipeDetails({
   servings,
   difficulty,
 }: {
-  type: "any" | "breakfast" | "lunch" | "dinner" | "snack";
+  type: "any" | "breakfast" | "lunch" | "dinner" | "snack" | "dessert";
   cookTime: number;
   servings: number;
   difficulty: "Easy" | "Medium" | "Hard";

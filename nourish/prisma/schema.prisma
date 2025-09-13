@@ -15,46 +15,63 @@ datasource db {
 }
 
 ///// Database models /////
+
+// Relational Databse model - to learn
+// model Recipe {
+//   id          Int         @id @default(autoincrement())
+//   name        String
+//   mealType    String
+//   cookTime    Int
+//   servings    Int
+//   difficulty  String
+//   description String?
+//   ingredients String      // JSON String
+//   instructions String     // JSON string
+//   tags        RecipeTag[] @relation("RecipeTags")
+//   isFavorite   Boolean
+//   createdAt   DateTime    @default(now())
+//   updatedAt   DateTime    @updatedAt
+// }
+
+// model Tag {
+//   id      Int        @id @default(autoincrement())
+//   name    String     @unique
+//   recipes RecipeTag[] @relation("RecipeTags")
+// }
+
+// model RecipeTag {
+//   recipe   Recipe @relation("RecipeTags", fields: [recipeId], references: [id])
+//   recipeId Int
+//   tag      Tag    @relation("RecipeTags", fields: [tagId], references: [id])
+//   tagId    Int
+
+//   @@id([recipeId, tagId]) // composite key ensures uniqueness
+// }
+
 model Recipe {
   id          Int         @id @default(autoincrement())
   name        String
-  mealType    Int
+  mealType    String      // comma separated
   cookTime    Int
   servings    Int
   difficulty  String
   description String?
   ingredients String      // JSON String
   instructions String     // JSON string
-  tags        RecipeTag[] @relation("RecipeTags")
-  isFavourite   Boolean
+  tags        String      // comma separated
+  isFavorite  Boolean
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-}
-
-model Tag {
-  id      Int        @id @default(autoincrement())
-  name    String     @unique
-  color   String
-  recipes RecipeTag[] @relation("RecipeTags")
-}
-
-model RecipeTag {
-  recipe   Recipe @relation("RecipeTags", fields: [recipeId], references: [id])
-  recipeId Int
-  tag      Tag    @relation("RecipeTags", fields: [tagId], references: [id])
-  tagId    Int
-
-  @@id([recipeId, tagId]) // composite key ensures uniqueness
-}
+} 
 
 model WeekRecipePlan {
   id          Int         @id @default(autoincrement())
   startDate   String      @unique
-  monday      Int
-  tuesday     Int
-  wednesday   Int
-  thursday    Int
-  friday      Int
-  saturday    Int
-  sunday      Int
+  monday      String      // JSON since each day has three times, and each time could have multiple recipes
+  tuesday     String      // e.g. {breakfast : [1,4], lunch: [3], dinner: [5]}
+  wednesday   String
+  thursday    String
+  friday      String
+  saturday    String
+  sunday      String
 }

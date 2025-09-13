@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { Toaster } from "@/components/ui/sonner";
+import Providers from "@/lib/QueryWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,28 +25,38 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pages = [{name: "Meal Plan", href: "/", icon: "📅"}, {name: "Recipes", href: "/recipes", icon: "🍽️"}];
+  const pages = [
+    { name: "Meal Plan", href: "/", icon: "📅" },
+    { name: "Recipes", href: "/recipes", icon: "🍽️" },
+  ];
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="p-4 space-x-4 items-center flex bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 text-foreground sticky top-0 shadow-md px-8">
-          <Link href={"/"} className="text-2xl font-bold">
-            Nourish
-          </Link>
-          <div className="justify-end flex-1 flex space-x-2">
-          {pages.map((page) => (
-            <Link key={page.name} href={page.href} className="text-primary hover:underline align-middle">
-              <div className="rounded-lg border border-primary/20 px-3 py-1 hover:bg-primary hover:text-primary-foreground transition inline-flex items-center">
-                <div className="inline-block mr-1">{page.icon}</div>
-                {page.name}
-              </div>
+        <Providers>
+          <header className="p-4 space-x-4 items-center flex bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 text-foreground sticky top-0 shadow-md px-8">
+            <Link href={"/"} className="text-2xl font-bold">
+              Nourish
             </Link>
-          ))}
-          </div>
-        </header>
-        {children}
+            <div className="justify-end flex-1 flex space-x-2">
+              {pages.map((page) => (
+                <Link
+                  key={page.name}
+                  href={page.href}
+                  className="text-primary hover:underline align-middle"
+                >
+                  <div className="rounded-lg border border-primary/20 px-3 py-1 hover:bg-primary hover:text-primary-foreground transition inline-flex items-center">
+                    <div className="inline-block mr-1">{page.icon}</div>
+                    {page.name}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </header>
+          <Toaster />
+          {children}
+        </Providers>
       </body>
     </html>
   );

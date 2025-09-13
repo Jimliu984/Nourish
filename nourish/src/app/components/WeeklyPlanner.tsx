@@ -47,7 +47,7 @@ export default function WeeklyPlanner() {
         {displayDays.map((day) => (
           <Card
             key={day}
-            className="overflow-hidden bg-card border-border/50 shadow-card"
+            className="overflow-hidden bg-card border-border/50 shadow-card pt-0"
           >
             <div className="bg-gradient-subtle p-4 border-b border-border/30">
               <div className="flex items-center justify-between">

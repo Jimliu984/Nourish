@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { TAGS } from "@/lib/FakeData";
 import {
   Select,
   SelectTrigger,
@@ -30,6 +29,8 @@ import { X, Plus } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Ingredient } from "@/lib/types";
+import { ALL_TAGS } from "@/lib/tags";
+import { useMutationPostRecipes } from "@/lib/hooks/api/recipes";
 
 type AddRecipeFormValues = {
   name: string;
@@ -70,6 +71,7 @@ function AddNewRecipeForm({
 }: {
   handleOpenChange: (open: boolean) => void;
 }) {
+  const postRecipeMutation = useMutationPostRecipes();
   const form = useForm<AddRecipeFormValues>({
     defaultValues: {
       name: "",
@@ -81,6 +83,7 @@ function AddNewRecipeForm({
       instructions: [],
       description: "",
       tags: [],
+      isFavorite: false,
     },
   });
   const ingredients = form.watch("ingredients");
@@ -89,8 +92,29 @@ function AddNewRecipeForm({
   const onSubmit: SubmitHandler<AddRecipeFormValues> = async (
     data: AddRecipeFormValues
   ) => {
-    handleOpenChange(false);
-    console.log(data);
+    if (data.name === "") {
+      form.setError("name", {})
+    } else if (data.ingredients.length === 0){
+      form.setError("ingredients", {})
+    } else if (data.instructions.length === 0) {
+      form.setError("instructions", {})
+    }
+    else {
+      await postRecipeMutation.mutateAsync({
+        name: data.name,
+        mealType: data.type,
+        ingredients: JSON.stringify(data.ingredients),
+        instructions: JSON.stringify(data.instructions),
+        cookTime: data.cookTime,
+        servings: data.servings,
+        difficulty: data.difficulty,
+        description: data.description,
+        tags: data.tags,
+        isFavorite: data.isFavorite,
+      })
+      handleOpenChange(false);
+      console.log(data);
+    }
   };
 
   const addIngredient = (ingredient: Ingredient) => {
@@ -147,7 +171,6 @@ function AddNewRecipeForm({
                     <Input
                       {...field}
                       placeholder="Enter recipe name"
-                      required
                     />
                   </FormControl>
                   <FormMessage />
@@ -226,18 +249,23 @@ function AddNewRecipeForm({
             />
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            <IngredientsField
-              ingredients={ingredients}
-              addNewIngredient={addIngredient}
-              removeIngredient={removeIngredient}
-              updateIngredient={updateIngredient}
-            />
-            <InstructionsField
-              instructions={instructions}
-              addNewInstruction={addInstruction}
-              removeInstruction={removeInstruction}
-              updateInstruction={updateInstruction}
-            />
+            <div>
+              <IngredientsField
+                ingredients={ingredients}
+                addNewIngredient={addIngredient}
+                removeIngredient={removeIngredient}
+                updateIngredient={updateIngredient}
+              />
+              {form.formState.errors.ingredients && <p className="text-red-400 text-[10px]">Add an ingredient</p>}
+            </div>
+            <div>
+              <InstructionsField
+                instructions={instructions}
+                addNewInstruction={addInstruction}
+                removeInstruction={removeInstruction}
+                updateInstruction={updateInstruction}
+              />
+            </div>
           </div>
           <FormField
             control={form.control}
@@ -259,7 +287,7 @@ function AddNewRecipeForm({
           <FormField
             control={form.control}
             name="tags"
-            render={({ field }) => (
+            render={() => (
               <TagsField tags={tags} addTag={addTag} removeTag={removeTag} />
             )}
           />
@@ -327,7 +355,7 @@ function IngredientsField({
                 value={ingredient.name}
                 onChange={(e) => updateIngredientName(index, e.target.value)}
                 placeholder="Enter ingredient"
-                className="flex-1"
+                className="flex-2"
               />
             </FormControl>
             <FormControl>
@@ -355,7 +383,7 @@ function IngredientsField({
             value={newIngredient.name}
             onChange={(e) => setNewIngredient({...newIngredient, name: e.target.value})}
             placeholder="Add new ingredient"
-            className="flex-1"
+            className="flex-2"
             // onKeyDown={(e) => {
             //   if (e.key === "Enter") {
             //     e.preventDefault();
@@ -484,7 +512,7 @@ function InstructionsField({
 
 function TagsField({ tags, addTag, removeTag }: TagsFieldProps) {
   const [tagSearch, setTagSearch] = useState("");
-  const filteredTags = TAGS.filter(
+  const filteredTags = ALL_TAGS.filter(
     (tag) =>
       tag.toLowerCase().includes(tagSearch.toLowerCase()) && !tags.includes(tag)
   );
@@ -500,7 +528,7 @@ function TagsField({ tags, addTag, removeTag }: TagsFieldProps) {
         />
         {tagSearch && filteredTags.length > 0 && (
           <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-2 border rounded-md bg-muted/30">
-            {filteredTags.map((tag) => (
+            {filteredTags.slice(0,7).map((tag) => (
               <Button
                 key={tag}
                 type="button"

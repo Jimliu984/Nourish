@@ -29,7 +29,7 @@ import {
 import { X, Plus } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Ingredient } from "@/lib/types";
+import { Ingredient, Recipe } from "@/lib/types";
 
 type AddRecipeFormValues = {
   name: string;
@@ -44,7 +44,7 @@ type AddRecipeFormValues = {
   isFavorite: boolean;
 };
 
-export default function EditRecipeDialog() {
+export default function EditRecipeDialog({recipe} : {recipe : Recipe}) {
   const [isOpen, setIsOpen] = useState(false);
   function handleOpenChange(open: boolean) {
     setIsOpen(open);
