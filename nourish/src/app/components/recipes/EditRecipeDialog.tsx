@@ -26,14 +26,14 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Copy, Edit } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Ingredient, Recipe } from "@/lib/types";
+import { Ingredient, MealType, Recipe } from "@/lib/types";
 
 type AddRecipeFormValues = {
   name: string;
-  type: "any" | "breakfast" | "lunch" | "dinner" | "snack";
+  type: MealType;
   ingredients: Ingredient[];
   instructions: string[]; // json instructions
   cookTime: number;
@@ -44,44 +44,53 @@ type AddRecipeFormValues = {
   isFavorite: boolean;
 };
 
-export default function EditRecipeDialog({recipe} : {recipe : Recipe}) {
+export default function EditRecipeDialog( { recipe, duplicate } : {recipe : Recipe, duplicate : boolean}) {
   const [isOpen, setIsOpen] = useState(false);
   function handleOpenChange(open: boolean) {
     setIsOpen(open);
   }
+  const triggerClass = duplicate ? "bg-background text-foreground hover:bg-primary/20" : "bg-primary hover:bg-primary/90 text-primary-foreground";
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger className="flex items-center bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 rounded-md px-4 py-2 gap-2">
-        <Plus className="h-4 w-4" />
-        <span>Add New Recipe</span>
+      <DialogTrigger className={`${triggerClass} flex items-center border shadow-xs rounded-md px-4 gap-2 text-sm font-medium justify-center whitespace-nowrap`}>
+        {duplicate ? <Copy className="h-4 w-4" /> : <Edit className="h-4 w-4" />}
+        {duplicate ? "Duplicate" : "Edit Recipe"}
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] min-w-[45vh] md:min-w-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add New Recipe</DialogTitle>
+          <DialogTitle>{duplicate ? "Duplicate Recipe" : "Edit Recipe"}</DialogTitle>
         </DialogHeader>
-        <AddNewRecipeForm handleOpenChange={handleOpenChange} />
+        <EditNewRecipeForm
+          recipe={recipe}
+          duplicate={duplicate}
+          handleOpenChange={handleOpenChange}
+        />
       </DialogContent>
     </Dialog>
   );
 }
 
-function AddNewRecipeForm({
+function EditNewRecipeForm({
+  recipe,
+  duplicate,
   handleOpenChange,
 }: {
+  recipe : Recipe,
+  duplicate : boolean,
   handleOpenChange: (open: boolean) => void;
 }) {
   const form = useForm<AddRecipeFormValues>({
     defaultValues: {
-      name: "",
-      type: "any",
-      cookTime: 60,
-      servings: 2,
-      difficulty: "Medium",
-      ingredients: [],
-      instructions: [],
-      description: "",
-      isFavorite: false,
-      tags: [],
+      name: duplicate ? `${recipe.name} (Copy)` : recipe.name,
+      type: recipe.type,
+      cookTime: recipe.cookTime,
+      servings: recipe.servings,
+      difficulty: recipe.difficulty,
+      ingredients: recipe.ingredients,
+      instructions: recipe.instructions,
+      description: recipe.description,
+      isFavorite: recipe.isFavorite,
+      tags: recipe.tags,
     },
   });
   const ingredients = form.watch("ingredients");
@@ -92,6 +101,11 @@ function AddNewRecipeForm({
   ) => {
     handleOpenChange(false);
     console.log(data);
+    if (duplicate) {
+      // Create new recipe
+    } else {
+      // Update curent recipe
+    }
   };
 
   const addIngredient = (ingredient: Ingredient) => {

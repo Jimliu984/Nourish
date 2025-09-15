@@ -82,6 +82,11 @@ export default function RecipeCard({ recipe } : RecipeCardProps) {
               {tag}
             </Badge>
           ))}
+          {recipe.tags.length > 3 && (
+              <Badge variant="outline" className="text-xs">
+                +{recipe.tags.length - 3} more
+              </Badge>
+            )}
         </div>
 
         <Link href={`/recipes/${urlName}`}>

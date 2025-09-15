@@ -12,7 +12,7 @@ export default function ShoppingListDialog() {
   }
   return (
     <Dialog open={isOpen} onOpenChange={() => handleOpenChange(!isOpen)}>
-      <DialogTrigger className="flex items-center bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 rounded-md px-4 py-2 gap-2">
+      <DialogTrigger className="flex items-center bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 rounded-md px-4 gap-2 py-2 text-sm font-medium">
         <ShoppingCart className="h-4 w-4" />
         <span>Shopping List</span>
       </DialogTrigger>

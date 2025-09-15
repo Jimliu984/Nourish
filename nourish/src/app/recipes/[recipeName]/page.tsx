@@ -1,6 +1,6 @@
-import FavouriteButton from "@/app/components/recipes/FavouriteButton";
+import EditRecipeDialog from "@/app/components/recipes/EditRecipeDialog";
+import AddFavouriteButton from "@/app/components/recipes/AddFavouriteButton";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { DIFFICULTY_COLORS } from "@/lib/Constants";
@@ -24,10 +24,10 @@ export default async function ViewRecipePage({
           {recipe.name}
         </h1>
         </div>
-        <div className="justify-end flex">
-            <FavouriteButton isFavorite={recipe.isFavorite} />
-            <Button>Add</Button>
-          <Button>Add</Button>
+        <div className="justify-end flex space-x-2">
+          <AddFavouriteButton isFavorite={recipe.isFavorite} />
+          <EditRecipeDialog recipe={recipe} duplicate={true}/>
+          <EditRecipeDialog recipe={recipe} duplicate={false}/>
         </div>
       </div>
       <div className="flex items-center gap-4 text-muted-foreground">

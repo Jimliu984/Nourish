@@ -51,7 +51,7 @@ datasource db {
 model Recipe {
   id          Int         @id @default(autoincrement())
   name        String
-  mealType    String      // comma separated
+  mealType    String      
   cookTime    Int
   servings    Int
   difficulty  String

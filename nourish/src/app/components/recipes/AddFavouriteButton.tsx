@@ -4,7 +4,7 @@ import { Heart } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function FavouriteButton({
+export default function AddFavouriteButton({
   isFavorite,
 }: {
   isFavorite: boolean;

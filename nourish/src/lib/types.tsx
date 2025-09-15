@@ -1,7 +1,7 @@
 interface Meal {
   id: string;
   name: string;
-  type: 'any' | "breakfast" | "lunch" | "dinner" | "snack";
+  type: MealType;
   ingredients?: string[];
 }
 
@@ -19,19 +19,19 @@ interface RecipeOverview {
 }
 
 type Ingredient = {
-  name : string;
-  quantity : string;
-}
+  name: string;
+  quantity: string;
+};
 
 interface Recipe {
   id: number;
   name: string;
-  type: 'any' | 'breakfast' | 'lunch' | 'dinner' | 'snack' | 'dessert';
+  type: MealType;
   ingredients: Ingredient[];
   instructions: string[];
   cookTime: number;
   servings: number;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
+  difficulty: "Easy" | "Medium" | "Hard";
   description: string;
   tags: string[];
   isFavorite: boolean;
@@ -54,4 +54,15 @@ interface WeekPlan {
   sunday: DailyMeals;
 }
 
-export type { Meal, DayMeals, RecipeOverview, Recipe, Ingredient, WeekPlan};
+type MealType = "any" | "breakfast" | "lunch" | "dinner" | "snack" | "dessert";
+
+type Week =
+  | "monday"
+  | "tuesday"
+  | "wednesday"
+  | "thursday"
+  | "friday"
+  | "saturday"
+  | "sunday";
+
+export type { Meal, MealType, DayMeals, DailyMeals, RecipeOverview, Recipe, Ingredient, WeekPlan, Week };

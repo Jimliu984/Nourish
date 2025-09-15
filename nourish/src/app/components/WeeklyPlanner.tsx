@@ -8,21 +8,68 @@ import ShoppingListDialog from "./ShoppingListDialog";
 import AddRecipeDialog from "./AddRecipeDialog";
 import ShowRecipeAdded from "./ShowRecipeAdded";
 import MealListItems from "./MealListItems";
-import { Meal } from "@/lib/types";
-const MEAL_TYPES = ["breakfast", "lunch", "dinner"];
-const DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
+import { DailyMeals, Meal, Week, WeekPlan } from "@/lib/types";
+import { getLastMondayDate } from "@/lib/helpers/dateHelper";
+const MEAL_TIMES : ("breakfast" | "lunch" | "dinner")[] = ["breakfast", "lunch", "dinner"];
+const DAYS : Week[] = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
 ];
 
 export default function WeeklyPlanner() {
   const [showWeekend, setShowWeekend] = useState(true);
+  
+  const [weekRecipe, setWeekRecipe] = useState<WeekPlan>({
+    startDate : getLastMondayDate(),
+    monday : { breakfast: [], lunch: [], dinner: [] },
+    tuesday : { breakfast: [], lunch: [], dinner: [] },
+    wednesday : { breakfast: [], lunch: [], dinner: [] },
+    thursday : { breakfast: [], lunch: [], dinner: [] },
+    friday : { breakfast: [], lunch: [], dinner: [] },
+    saturday : { breakfast: [], lunch: [], dinner: [] },
+    sunday : { breakfast: [], lunch: [], dinner: [] },
+  })
 
+  function addRecipe(
+    recipeId: number,
+    mealTime: "breakfast" | "lunch" | "dinner",
+    day: Week
+  ) {
+    console.log(`${recipeId}, ${mealTime}, ${day}`)
+    setWeekRecipe(prev => {
+      const update = {...prev};
+      switch (day) {
+        case "monday":
+          update.monday[mealTime].push(recipeId);
+          break;
+        case "tuesday":
+          update.tuesday[mealTime].push(recipeId);
+          break;
+        case "wednesday":
+          update.wednesday[mealTime].push(recipeId);
+          break;
+        case "thursday":
+          update.thursday[mealTime].push(recipeId);
+          break;
+        case "friday":
+          update.friday[mealTime].push(recipeId);
+          break;
+        case "saturday":
+          update.saturday[mealTime].push(recipeId);
+          break;
+        case "sunday":
+          update.sunday[mealTime].push(recipeId);
+          break;
+      }
+      console.log(update)
+      return update;
+    });
+  }
   const displayDays = showWeekend ? DAYS : DAYS.slice(0, 5);
 
   return (
@@ -51,7 +98,7 @@ export default function WeeklyPlanner() {
           >
             <div className="bg-gradient-subtle p-4 border-b border-border/30">
               <div className="flex items-center justify-between">
-                <h3 className="font-bold text-xl text-foreground">{day}</h3>
+                <h3 className="font-bold text-xl text-foreground">{day.slice(0,1).toUpperCase() + day.slice(1)}</h3>
                 <div className="flex items-center gap-2">
                   {new Date().toLocaleDateString("en-US", {
                     weekday: "long",
@@ -65,13 +112,14 @@ export default function WeeklyPlanner() {
             </div>
             <div className="p-4">
               <div className="grid md:grid-cols-3 gap-4">
-                {MEAL_TYPES.map((mealType) => (
-                  <AddRecipeDialog key={mealType} mealType={mealType}>
-                    <div key={mealType} className="space-y-3">
+                {MEAL_TIMES.map((mealTime) => (
+                  weekRecipe[day][mealTime].length === 0 ? 
+                  <AddRecipeDialog key={mealTime} day={day} mealTime={mealTime} addRecipe={addRecipe}>
+                    <div key={mealTime} className="space-y-3">
                       <div className="flex items-center justify-between">
                         <h4 className="font-semibold text-foreground capitalize flex items-center gap-2">
                           <div className="w-2 h-2 rounded-full bg-primary"></div>
-                          {mealType}
+                          {mealTime}
                         </h4>
                         <div
                           className="h-7 w-7 p-0 bg-meal-slot text-foreground hover:bg-meal-slot-hover border border-border/50 shadow-card hover:shadow-soft transition flex items-center justify-center rounded-lg cursor-pointer"
@@ -90,31 +138,31 @@ export default function WeeklyPlanner() {
                         </div>
                       }
                     </div>
-                  </AddRecipeDialog>
-                  //  <div key={mealType} className="space-y-3">
-                  //     <div className="flex items-center justify-between">
-                  //       <h4 className="font-semibold text-foreground capitalize flex items-center gap-2">
-                  //         <div className="w-2 h-2 rounded-full bg-primary"></div>
-                  //         {mealType}
-                  //       </h4>
-                  //       <AddRecipeDialog key={mealType} mealType={mealType}>
-                  //         <div
-                  //         className="h-7 w-7 p-0 bg-meal-slot text-foreground hover:bg-meal-slot-hover border border-border/50 shadow-card hover:shadow-soft transition flex items-center justify-center rounded-lg cursor-pointer"
-                  //         >
-                  //           <Plus className="h-3 w-3" />
-                  //         </div>
-                  //       </AddRecipeDialog>
-                  //     </div>
-                  //     {
-                  //       <div className="min-h-[80px] w-100 p-4 bg-meal-slot border border-border/30 rounded-xl transition-colors hover:bg-meal-slot/80">
-                  //         <div className="flex items-center justify-center h-full text-muted-foreground">
-                  //           <div className="flex flex-col items-center gap-2 text-center">
-                  //             <MealListItems meals={[{id: "1", name: "Sample Meal", type: "breakfast"}] as Meal[]} day={day} mealType={mealType} removeMeal={() => {}} />
-                  //           </div>
-                  //         </div>
-                  //       </div>
-                  //     }
-                  //   </div>
+                  </AddRecipeDialog> :
+                   <div key={mealTime} className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-semibold text-foreground capitalize flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-primary"></div>
+                          {mealTime}
+                        </h4>
+                        <AddRecipeDialog key={mealTime} day={day} mealTime={mealTime} addRecipe={addRecipe}>
+                          <div
+                          className="h-7 w-7 p-0 bg-meal-slot text-foreground hover:bg-meal-slot-hover border border-border/50 shadow-card hover:shadow-soft transition flex items-center justify-center rounded-lg cursor-pointer"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </div>
+                        </AddRecipeDialog>
+                      </div>
+                      {weekRecipe[day][mealTime].map((item, index) => 
+                       ( <div key={index} className="min-h-[80px] w-100 p-4 bg-meal-slot border border-border/30 rounded-xl transition-colors hover:bg-meal-slot/80">
+                          <div className="flex items-center justify-center h-full text-muted-foreground">
+                            <div className="flex flex-col items-center gap-2 text-center">
+                              <MealListItems meals={[{id: "1", name: "Sample Meal", type: "breakfast"}] as Meal[]} day={day} mealType={"breakfast"} removeMeal={() => {}} />
+                            </div>
+                          </div>
+                        </div>)
+                      )}
+                    </div>
                 ))}
               </div>
             </div>
