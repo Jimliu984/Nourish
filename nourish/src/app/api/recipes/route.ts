@@ -3,22 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(request: NextRequest) {
-  // const where: any = {};
-  // const queries = request.nextUrl.searchParams.keys().toArray();
-  // if (queries.length > 0) {
-  //   for (const key in queries) {
-  //     switch (key) {
-  //       case "id":
-  //         where.id = request.nextUrl.searchParams.get("id");
-  //         break;
-  //       case "name":
-  //         where.id = request.nextUrl.searchParams.get("id");
-  //         break;
-  //     }
-  //   }
-  // }
-
+export async function GET() {
   const recipe = await prisma.recipe.findMany();
   return NextResponse.json(recipe);
 }

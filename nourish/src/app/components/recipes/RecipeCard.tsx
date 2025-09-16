@@ -31,10 +31,10 @@ export default function RecipeCard({ recipe } : RecipeCardProps) {
         </div>
 
         {recipe.description ? (
-          <p className="text-sm text-muted-foreground line-clamp-2 min-w-screen">
+          <p className="text-sm text-muted-foreground line-clamp-2 leading-6 min-h-[3rem] m-0 min-w-fit">
             {recipe.description}
           </p>
-        ) :  <p className="text-sm text-muted-foreground line-clamp-2 min-w-screen">
+        ) :  <p className="text-sm text-muted-foreground line-clamp-2 leading-6 min-h-[3rem] m-0 min-w-fit">
             {"No description"}
           </p>}
 

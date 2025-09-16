@@ -2,6 +2,7 @@ import { Recipe as RecipeDb } from "@/generated/prisma";
 import { Recipe } from "@/lib/types";
 import { Ingredient, RecipeFormValues } from "@/lib/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { NextResponse } from "next/server";
 
 // const basePath = `${process.env.NEXT_PUBLIC_ROOT_URL}/api/accounts`;
 
@@ -15,7 +16,9 @@ function useQueryGetRecipes() {
         },
       });
       const recipes = (await response.json()) as RecipeDb[];
-    const stuff = recipes.map((recipe) => convertDbRecipeToUiRecipe(recipe)) as Recipe[];
+      const stuff = recipes.map((recipe) =>
+        convertDbRecipeToUiRecipe(recipe)
+      ) as Recipe[];
       return stuff;
     },
   });
@@ -54,7 +57,6 @@ function useMutationCreateRecipe() {
         instructions: JSON.stringify(instructions),
         isFavorite: data.isFavorite,
       };
-      console.log(JSON.stringify(submitObj))
       const response = await fetch("/api/recipes", {
         headers: {
           "Content-Type": "application/json",
@@ -62,20 +64,35 @@ function useMutationCreateRecipe() {
         method: "POST",
         body: JSON.stringify(submitObj),
       });
+      return NextResponse.json(response);
     },
   });
 }
 
 function useMutationUpdateRecipe() {
   return useMutation({
-    mutationFn: async ({ id, data } : { id: number, data : any }) => {
+    mutationFn: async ({ id, data }: { id: number; data: any }) => {
+      let submitObj : any = {}
+      if (data.ingredients) {
+        submitObj.ingredients = JSON.stringify(arrayToIngredientObject(data.ingredients));
+      }
+      if (data.instructions) {
+        submitObj.instructions = JSON.stringify(arrayToInstructionObject(data.instructions));
+      }
+      if (data.tags) {
+        submitObj.tags = data.tags.join(",");
+      }
+      submitObj.id = id;
+      const { ingredients, instructions, tags, ...rest } = data;
+      submitObj = {...submitObj, ...rest}
       const response = await fetch(`/api/recipes/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
         method: "PUT",
-        body: JSON.stringify(data),
+        body: JSON.stringify(submitObj),
       });
+      return NextResponse.json(response);
     },
   });
 }
@@ -103,8 +120,8 @@ function convertDbRecipeToUiRecipe(recipe: RecipeDb) {
   }
 }
 
-function arrayToIngredientObject(arr: Ingredient[]): Record<number, string> {
-  return arr.reduce((obj, ing, index) => {
+function arrayToIngredientObject(arr: Ingredient[]): Record<string, string> {
+  return arr.reduce((obj, ing) => {
     obj[ing.name] = ing.quantity;
     return obj;
   }, {} as Record<string, string>);
@@ -115,13 +132,22 @@ function arrayToInstructionObject(arr: string[]): Record<number, string> {
     return obj;
   }, {} as Record<number, string>);
 }
-function ingredientObjectToArray(ingredients : Record<string, string>) : Ingredient[] {
-    const destructure = Object.keys(ingredients).map(key => [key, ingredients[key]]);
-    return destructure.map((values) => { return {name : values[0], quantity: values[1]}})
+function ingredientObjectToArray(
+  ingredients: Record<string, string>
+): Ingredient[] {
+  const destructure = Object.keys(ingredients).map((key) => [
+    key,
+    ingredients[key],
+  ]);
+  return destructure.map((values) => {
+    return { name: values[0], quantity: values[1] };
+  });
 }
-function instructionObjectToArray(instructions : Record<number, string>) : string[] {
-    return Object.keys(instructions)
-    .map(key => [Number.parseInt(key), instructions[Number.parseInt(key)]])
+function instructionObjectToArray(
+  instructions: Record<number, string>
+): string[] {
+  return Object.keys(instructions)
+    .map((key) => [Number.parseInt(key), instructions[Number.parseInt(key)]])
     .sort((a, b) => Number(a[0]) - Number(b[0]))
     .map(([, value]) => value.toString());
 }

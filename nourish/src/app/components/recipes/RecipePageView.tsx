@@ -3,7 +3,6 @@ import EditRecipeDialog from "@/app/components/recipes/EditRecipeDialog";
 import AddFavouriteButton from "@/app/components/recipes/AddFavouriteButton";
 import { Badge } from "@/components/ui/badge";
 import { DIFFICULTY_COLORS } from "@/lib/Constants";
-import { Recipe } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Ingredient } from "@/lib/types";
@@ -14,7 +13,6 @@ export default function RecipePageView({ recipeName }: { recipeName: string }) {
   const { data: recipe } = useQueryGetRecipeById(
     Number.parseInt(recipeName.split("-")[0])
   );
-  console.log(recipe);
   return recipe && (
     <div className="flex flex-col items-start min-w-screen justify-center px-30 py-6 space-x-2 space-y-6">
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 w-full">

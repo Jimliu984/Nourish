@@ -1,4 +1,4 @@
-import { Recipe as DbRecipe } from "@/generated/prisma";
+// import { Recipe as DbRecipe } from "@/generated/prisma";
 // import { Ingredient, Recipe } from "../types";
 
 // function convertDbRecipeToRecipe({recipe} : {recipe:DbRecipe}){

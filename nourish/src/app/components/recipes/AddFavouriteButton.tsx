@@ -4,6 +4,7 @@ import { useMutationUpdateRecipe } from "@/lib/hooks/api/recipes";
 import { Heart } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function AddFavouriteButton({
   recipeId,
@@ -14,12 +15,14 @@ export default function AddFavouriteButton({
 }) {
   const [favorite, setFavorite] = useState(isFavorite);
   const updateFav = useMutationUpdateRecipe();
+  const queryClient = useQueryClient();
   function toggleFavorite() {
     async function updateFavorite() {
       await updateFav.mutateAsync({
         id: recipeId,
         data: { isFavorite: !favorite },
       });
+      await queryClient.invalidateQueries({ queryKey : ['recipes'] })
     }
     updateFavorite();
     setFavorite(!favorite);

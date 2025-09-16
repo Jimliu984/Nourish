@@ -2,7 +2,7 @@
 import { SAMPLE_RECIPES } from "@/lib/FakeData";
 import RecipeSearchBar from "./RecipeSearchBar";
 import RecipeCard from "./RecipeCard";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQueryGetRecipes } from "@/lib/hooks/api/recipes";
 
 export default function RecipeSearchView() {

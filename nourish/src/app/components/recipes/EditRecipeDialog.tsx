@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { TAGS } from "@/lib/FakeData";
 import {
   Select,
   SelectTrigger,
@@ -30,6 +29,9 @@ import { X, Plus, Copy, Edit } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Ingredient, Recipe, RecipeFormValues } from "@/lib/types";
+import { useMutationCreateRecipe, useMutationUpdateRecipe } from "@/lib/hooks/api/recipes";
+import { useQueryClient } from "@tanstack/react-query";
+import { ALL_TAGS } from "@/lib/tags";
 
 export default function EditRecipeDialog( { recipe, duplicate } : {recipe : Recipe, duplicate : boolean}) {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,6 +68,9 @@ function EditNewRecipeForm({
   duplicate : boolean,
   handleOpenChange: (open: boolean) => void;
 }) {
+  const createNewRecipe = useMutationCreateRecipe();
+  const updateRecipe = useMutationUpdateRecipe();
+  const queryClient = useQueryClient();
   const form = useForm<RecipeFormValues>({
     defaultValues: {
       name: duplicate ? `${recipe.name} (Copy)` : recipe.name,
@@ -86,12 +91,38 @@ function EditNewRecipeForm({
   const onSubmit: SubmitHandler<RecipeFormValues> = async (
     data: RecipeFormValues
   ) => {
-    handleOpenChange(false);
-    console.log(data);
-    if (duplicate) {
-      // Create new recipe
-    } else {
-      // Update curent recipe
+    try {
+      let servings = data.servings;
+      let cookTime = data.cookTime;
+      if (data.name === "") {
+        form.setError("name", {});
+      } else if (data.ingredients.length === 0) {
+        form.setError("ingredients", {});
+      } else if (data.instructions.length === 0) {
+        form.setError("instructions", {});
+      } else {
+        if (typeof data.servings === "string") {
+          servings = Number.parseInt(data.servings);
+        }
+        if (typeof data.cookTime === "string") {
+          cookTime = Number.parseInt(data.cookTime);
+        }
+        data.servings = servings;
+        data.cookTime = cookTime;
+      }
+      if (duplicate) {
+        // Create new recipe
+        await createNewRecipe.mutateAsync(data);
+      } else {
+        // Update curent recipe
+        const { type, ...rest } = data;
+        await updateRecipe.mutateAsync( {id: recipe.id, data: { ...rest , mealType: type } });
+        await queryClient.invalidateQueries({ queryKey : ['recipes', recipe.id]});
+        queryClient.getQueryData(['recipes', recipe.id])
+      }
+      handleOpenChange(false);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -261,7 +292,7 @@ function EditNewRecipeForm({
           <FormField
             control={form.control}
             name="tags"
-            render={({ field }) => (
+            render={() => (
               <TagsField tags={tags} addTag={addTag} removeTag={removeTag} />
             )}
           />
@@ -486,7 +517,7 @@ function InstructionsField({
 
 function TagsField({ tags, addTag, removeTag }: TagsFieldProps) {
   const [tagSearch, setTagSearch] = useState("");
-  const filteredTags = TAGS.filter(
+  const filteredTags = ALL_TAGS.filter(
     (tag) =>
       tag.toLowerCase().includes(tagSearch.toLowerCase()) && !tags.includes(tag)
   );
