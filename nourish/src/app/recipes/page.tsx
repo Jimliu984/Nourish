@@ -1,8 +1,6 @@
 import { ChefHat } from "lucide-react";
-import RecipeSearchBar from "../components/recipes/RecipeSearchBar";
-import { SAMPLE_RECIPES } from "@/lib/FakeData";
-import RecipeCard from "../components/recipes/RecipeCard";
 import AddNewRecipeDialog from "../components/recipes/AddNewRecipeDialog";
+import RecipeSearchView from "../components/recipes/RecipeSearchView";
 
 export default function RecipesPage() {
   return (
@@ -14,12 +12,7 @@ export default function RecipesPage() {
         </h1>
         <AddNewRecipeDialog />
      </div>
-     <RecipeSearchBar />
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {SAMPLE_RECIPES.slice(0,18).map((recipe) => (
-        <RecipeCard key={recipe.id} recipe={recipe} />
-      ))}
-      </div>
+     <RecipeSearchView />
     </div>
   );
 }

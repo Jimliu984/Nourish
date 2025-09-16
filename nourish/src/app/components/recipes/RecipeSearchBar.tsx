@@ -2,24 +2,17 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { SAMPLE_RECIPES } from "@/lib/FakeData";
+import { Recipe } from "@/lib/types";
 import { Search } from "lucide-react";
 import { useState } from "react";
+import { ALL_TAGS } from "@/lib/tags";
+import { Button } from "@/components/ui/button";
 
-export default function RecipeSearchBar() {
+export default function RecipeSearchBar({ setTagFilters, tagFilters, setFilteredRecipes } : { setTagFilters : (tags: string[]) => void , tagFilters : string[], setFilteredRecipes : (recipes: Recipe[]) => void }) {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedType, setSelectedType] = useState<string>("all");
   const mealTypes = ["all", "breakfast", "lunch", "dinner", "snack"];
-  const availableTags = [
-    "Quick",
-    "Healthy",
-    "Vegetarian",
-    "High Protein",
-    "Spicy",
-    "Mediterranean",
-    "Asian",
-    "Make-ahead",
-    "Gluten-free",
-  ];
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
@@ -33,9 +26,38 @@ export default function RecipeSearchBar() {
           <Input
             placeholder="Search recipes, ingredients, or descriptions..."
             //   value={searchTerm}
-            //   onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              const filterValue = e.target.value.toLowerCase();
+              const filtered = SAMPLE_RECIPES.filter((recipe) => {
+                return (
+                  recipe.name.toLowerCase().includes(filterValue) ||
+                  recipe.ingredients.find((ing) =>
+                    ing.name.toLowerCase().includes(filterValue)
+                  ) ||
+                  recipe.tags.find((tag) =>
+                    tagFilters.includes(tag)
+                  )
+                );
+              });
+              setFilteredRecipes(filtered);
+            }}
             className="pl-10"
           />
+          {/* <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-2 border rounded-md bg-muted/30">
+            {ALL_TAGS.filter((tag) => {
+              return tagFilters.includes(tag)
+            }).slice(0,7).map((tag) => (
+              <Button
+                key={tag}
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8"
+              >
+                {tag}
+              </Button>
+            ))}
+          </div> */}
         </div>
 
         {/* Meal Type Filter */}
@@ -55,21 +77,17 @@ export default function RecipeSearchBar() {
           ))}
         </div>
 
-        {/* Tag Filters */}
         <div className="flex flex-wrap gap-2">
           <span className="text-sm font-medium text-muted-foreground mr-2">
             Tags:
           </span>
-          {availableTags.map((tag) => (
-            <Badge
-              key={tag}
-              variant={selectedTags.includes(tag) ? "default" : "outline"}
-              className="cursor-pointer hover:bg-primary/20"
-              onClick={() => toggleTag(tag)}
-            >
-              {tag}
-            </Badge>
-          ))}
+          <Badge
+            variant={true ? "default" : "outline"}
+            className="cursor-pointer hover:bg-primary/20"
+            onClick={() => toggleTag("healthy")}
+          >
+            healthy
+          </Badge>
         </div>
       </div>
     </Card>

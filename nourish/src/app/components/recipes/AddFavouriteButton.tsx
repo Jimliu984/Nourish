@@ -1,16 +1,27 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { useMutationUpdateRecipe } from "@/lib/hooks/api/recipes";
 import { Heart } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 export default function AddFavouriteButton({
+  recipeId,
   isFavorite,
 }: {
+  recipeId: number;
   isFavorite: boolean;
 }) {
   const [favorite, setFavorite] = useState(isFavorite);
+  const updateFav = useMutationUpdateRecipe();
   function toggleFavorite() {
+    async function updateFavorite() {
+      await updateFav.mutateAsync({
+        id: recipeId,
+        data: { isFavorite: !favorite },
+      });
+    }
+    updateFavorite();
     setFavorite(!favorite);
     toast(favorite ? "Removed from favourites" : "Added to favourites");
   }

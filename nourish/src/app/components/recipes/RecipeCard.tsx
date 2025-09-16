@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { DIFFICULTY_COLORS } from "@/lib/Constants";
 import { Recipe } from "@/lib/types";
-import { Clock, Heart, Users } from "lucide-react";
+import { Clock, Users } from "lucide-react";
 import Link from "next/link";
+import RecipeCardFavouriteHeart from "./RecipeCardFavouriteHeart";
 
 interface RecipeCardProps {
     recipe: Recipe;
@@ -14,7 +15,7 @@ export default function RecipeCard({ recipe } : RecipeCardProps) {
   const urlName = `${recipe.id}-${recipe.name.toLowerCase().split(" ").join("-")}`
   return (
     <Card
-      className="p-6 bg-recipe-card border-border/30 hover:bg-recipe-hover hover:shadow-hover transition-all duration-200"
+      className="p-6 bg-recipe-card border-border/30 hover:bg-recipe-hover hover:shadow-hover transition-all duration-200 min-w-full flex flex-1"
     >
       <div className="space-y-4">
         <div className="flex justify-between items-start">
@@ -26,23 +27,16 @@ export default function RecipeCard({ recipe } : RecipeCardProps) {
               {recipe.type}
             </Badge>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            // onClick={() => toggleFavorite(recipe.id)}
-            className="text-red-500 hover:text-red-600"
-          >
-            <Heart
-              className={`h-4 w-4 ${recipe.isFavorite ? "fill-current" : ""}`}
-            />
-          </Button>
+          <RecipeCardFavouriteHeart recipeId={recipe.id} isFavourite={recipe.isFavorite} />
         </div>
 
-        {recipe.description && (
-          <p className="text-sm text-muted-foreground line-clamp-2">
+        {recipe.description ? (
+          <p className="text-sm text-muted-foreground line-clamp-2 min-w-screen">
             {recipe.description}
           </p>
-        )}
+        ) :  <p className="text-sm text-muted-foreground line-clamp-2 min-w-screen">
+            {"No description"}
+          </p>}
 
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <div className="flex items-center gap-1">

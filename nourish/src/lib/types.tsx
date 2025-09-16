@@ -64,5 +64,18 @@ type Week =
   | "friday"
   | "saturday"
   | "sunday";
+  
 
-export type { Meal, MealType, DayMeals, DailyMeals, RecipeOverview, Recipe, Ingredient, WeekPlan, Week };
+type RecipeFormValues = {
+  name: string;
+  type: MealType;
+  ingredients: Ingredient[];
+  instructions: string[]; // json instructions
+  cookTime: number;
+  servings: number;
+  difficulty: "Easy" | "Medium" | "Hard";
+  description: string;
+  tags: string[];
+  isFavorite: boolean;
+};
+export type { Meal, MealType, DayMeals, DailyMeals, RecipeOverview, Recipe, Ingredient, WeekPlan, Week, RecipeFormValues };

@@ -29,20 +29,7 @@ import {
 import { X, Plus, Copy, Edit } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Ingredient, MealType, Recipe } from "@/lib/types";
-
-type AddRecipeFormValues = {
-  name: string;
-  type: MealType;
-  ingredients: Ingredient[];
-  instructions: string[]; // json instructions
-  cookTime: number;
-  servings: number;
-  difficulty: "Easy" | "Medium" | "Hard";
-  description: string;
-  tags: string[];
-  isFavorite: boolean;
-};
+import { Ingredient, Recipe, RecipeFormValues } from "@/lib/types";
 
 export default function EditRecipeDialog( { recipe, duplicate } : {recipe : Recipe, duplicate : boolean}) {
   const [isOpen, setIsOpen] = useState(false);
@@ -79,7 +66,7 @@ function EditNewRecipeForm({
   duplicate : boolean,
   handleOpenChange: (open: boolean) => void;
 }) {
-  const form = useForm<AddRecipeFormValues>({
+  const form = useForm<RecipeFormValues>({
     defaultValues: {
       name: duplicate ? `${recipe.name} (Copy)` : recipe.name,
       type: recipe.type,
@@ -96,8 +83,8 @@ function EditNewRecipeForm({
   const ingredients = form.watch("ingredients");
   const instructions = form.watch("instructions");
   const tags = form.watch("tags");
-  const onSubmit: SubmitHandler<AddRecipeFormValues> = async (
-    data: AddRecipeFormValues
+  const onSubmit: SubmitHandler<RecipeFormValues> = async (
+    data: RecipeFormValues
   ) => {
     handleOpenChange(false);
     console.log(data);
