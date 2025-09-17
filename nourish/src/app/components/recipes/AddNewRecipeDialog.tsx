@@ -26,7 +26,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { X, Plus } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Ingredient, RecipeFormValues } from "@/lib/types";
 import { ALL_TAGS } from "@/lib/tags";
@@ -333,6 +333,7 @@ function IngredientsField({
     name: "",
     quantity: "",
   });
+  const ingredientRef = useRef<HTMLInputElement>(null);
   function updateIngredientName(index: number, value: string) {
     const ing = ingredients[index];
     updateIngredient(index, { ...ing, name: value });
@@ -386,15 +387,7 @@ function IngredientsField({
             }
             placeholder="Add new ingredient"
             className="flex-2"
-            // onKeyDown={(e) => {
-            //   if (e.key === "Enter") {
-            //     e.preventDefault();
-            //     if (newIngredient.name.trim()) {
-            //       addNewIngredient(newIngredient);
-            //       setNewIngredient({name: "", quantity: ""});
-            //     }
-            //   }
-            // }}
+            ref={ingredientRef}
           />
           <Input
             value={newIngredient.quantity}
@@ -412,6 +405,7 @@ function IngredientsField({
                 ) {
                   addNewIngredient(newIngredient);
                   setNewIngredient({ name: "", quantity: "" });
+                  setTimeout(() => ingredientRef.current?.focus(), 0);
                 }
               }
             }}
