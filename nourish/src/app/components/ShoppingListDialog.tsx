@@ -87,9 +87,9 @@ export default function ShoppingListDialog({
           <TabsContent value="by-recipe" className="mt-4 space-y-2">
             {individualRecipes.size > 0 ? (
               individualRecipes
-                .keys()
+                .entries()
                 .toArray()
-                .map((recipe) => (
+                .map(([recipeId, [recipe, count]]) => (
                   <Card key={recipe.name} className="p-4">
                     <div className="flex items-center justify-between gap-2 mb-1">
                       <div className="flex items-center gap-2">
@@ -99,7 +99,7 @@ export default function ShoppingListDialog({
                         </h3>
                       </div>
                       <Badge className="justify-end" variant="secondary">
-                        {individualRecipes.get(recipe)}
+                        {count}
                       </Badge>
                     </div>
                     <div className="space-y-1">

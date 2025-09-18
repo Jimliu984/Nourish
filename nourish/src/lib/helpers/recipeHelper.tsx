@@ -1,19 +1,19 @@
 import { ShoppingListRecipe, Week, WeekPlan } from "../types";
 const days: Week[] = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ];
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+];
 
-  const meals: ("breakfast" | "lunch" | "dinner")[] = [
-    "breakfast",
-    "lunch",
-    "dinner",
-  ];
+const meals: ("breakfast" | "lunch" | "dinner")[] = [
+  "breakfast",
+  "lunch",
+  "dinner",
+];
 export function extractAllIngredientsFromWeekPlan(weekPlan: WeekPlan) {
   let allIngredients = new Map<string, string[]>();
   meals.map((mealType) => {
@@ -33,15 +33,18 @@ export function extractAllIngredientsFromWeekPlan(weekPlan: WeekPlan) {
   return allIngredients;
 }
 
-export function extractIngredientsPerRecipeFromWeekPlan(weekPlan : WeekPlan) {
-  let allIngredients = new Map<ShoppingListRecipe, number>();
+export function extractIngredientsPerRecipeFromWeekPlan(weekPlan: WeekPlan) {
+  let allIngredients = new Map<number, [ShoppingListRecipe, number]>();
   meals.map((mealType) => {
     days.map((day) => {
       const recipes = weekPlan[day][mealType];
       recipes.map((recipe) => {
-        allIngredients.set(recipe, (allIngredients.get(recipe) ?? 0) + 1)
+        allIngredients.set(recipe.id, [
+          recipe,
+          (allIngredients.get(recipe.id)?.[1] ?? 0) + 1,
+        ]);
       });
     });
   });
-return allIngredients;
+  return allIngredients;
 }

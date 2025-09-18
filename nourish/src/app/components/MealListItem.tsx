@@ -15,7 +15,7 @@ export default function MealListItem({
 }: MealListItemsProps) {
   return (
     <div
-      className="group flex items-center justify-between bg-recipe-card p-3 rounded-lg border border-border/20 transition-all hover:shadow-sm hover:border-border/40"
+      className="group flex items-center justify-between bg-recipe-card p-3 rounded-lg border border-border/20 transition-all hover:shadow-sm hover:border-border/40 w-full"
     >
       <span className="text-sm font-medium text-foreground">{recipeName}</span>
       <Button
