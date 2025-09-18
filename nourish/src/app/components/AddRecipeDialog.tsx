@@ -6,30 +6,24 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Tag, X } from "lucide-react";
 import { useState } from "react";
-import RecipeTag from "./RecipeTag";
 import AddRecipeDialogCard from "./AddRecipeDialogCard";
-import { SAMPLE_RECIPES } from "@/lib/FakeData";
-import { Recipe, Week } from "@/lib/types";
+import { ShoppingListRecipe, Week } from "@/lib/types";
+import { useQueryGetRecipes } from "@/lib/hooks/api/recipes";
+import { ALL_TAGS } from "@/lib/tags";
+import { Badge } from "@/components/ui/badge";
 
 interface AddRecipeDialogProps {
   mealTime: "breakfast" | "lunch" | "dinner";
   day: Week;
   addRecipe: (
-    recipeId: number,
+    recipe: ShoppingListRecipe,
     mealTime: "breakfast" | "lunch" | "dinner",
     day: Week
   ) => void;
   children: React.ReactNode;
 }
-const availableTags = [
-  "Quick",
-  "Healthy",
-  "Vegetarian",
-  "High Protein",
-  "Low Carb",
-];
 
 export default function AddRecipeDialog({
   mealTime,
@@ -37,18 +31,33 @@ export default function AddRecipeDialog({
   addRecipe,
   children,
 }: AddRecipeDialogProps) {
+  const { data: allRecipes } = useQueryGetRecipes();
   const [isOpen, setIsOpen] = useState(false);
-  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(
-    SAMPLE_RECIPES.filter((rec) => rec.type === mealTime)
-  );
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const toggleTag = (tag: string) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-    );
-  };
+  const [searchFilter, setSearchFilter] = useState<string>("");
+  const [showTagSuggestions, setShowTagSuggestions] = useState(false);
+  const suggestedTags = ALL_TAGS.filter(tag => 
+    tag.toLowerCase().includes(searchFilter.toLowerCase()) && 
+    !selectedTags.includes(tag) &&
+    searchFilter.trim().length > 0
+  );
   function handleOpenChange(open: boolean) {
     setIsOpen(open);
+  }
+  function addTagFromSearch(tag: string) {
+    setSelectedTags((prev) => {
+      if (!prev.includes(tag)) {
+        return [...prev, tag];
+      }
+      return [];
+    });
+    setSearchFilter("");
+    setShowTagSuggestions(false);
+  };
+  function removeTag(tag: string) {
+    setSelectedTags((prev) => {
+      return prev.filter((t) => t !== tag);
+    });
   }
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -65,49 +74,79 @@ export default function AddRecipeDialog({
           <Input
             placeholder="Search recipes or ingredients..."
             onChange={(e) => {
-              const filterValue = e.target.value.toLowerCase();
-              const filtered = SAMPLE_RECIPES.filter((recipe) => {
-                return (
-                  recipe.name.toLowerCase().includes(filterValue) ||
-                  recipe.ingredients.find((ing) =>
-                    ing.name.toLowerCase().includes(filterValue)
-                  ) ||
-                  recipe.tags.find((tag) =>
-                    tag.toLowerCase().includes(filterValue)
-                  )
-                );
-              });
-              setFilteredRecipes(filtered);
+              setSearchFilter(e.target.value);
+              setShowTagSuggestions(e.target.value.trim().length > 0);
             }}
             className="pl-10"
+            value={searchFilter}
           />
         </div>
+        <div>
+        {showTagSuggestions && (
+            <div className="top-full left-0 right-0 mt-1 bg-popover border rounded-md shadow-lg z-50 max-h-[200px] overflow-y-auto">
+              <div className="p-2 border-b bg-muted/50">
+                <span className="text-xs text-muted-foreground font-medium">
+                  Suggested tags:
+                </span>
+              </div>
+              {suggestedTags.slice(0, 8).map((tag) => (
+                <div
+                  key={tag}
+                  onClick={() => addTagFromSearch(tag)}
+                  className="flex items-center gap-2 p-2 hover:bg-accent cursor-pointer transition-colors"
+                >
+                  <Tag className="h-3 w-3 text-muted-foreground" />
+                  <span className="text-sm">{tag}</span>
+                  <Plus className="h-3 w-3 text-muted-foreground ml-auto" />
+                </div>
+              ))}
+              {suggestedTags.length > 8 && (
+                <div className="p-2 text-xs text-muted-foreground text-center border-t">
+                  +{suggestedTags.length - 8} more tags available
+                </div>
+              )}
+            </div>
+          )}
+          </div>
         <div className="flex flex-wrap gap-2">
-          {availableTags.map((tag) => (
-            <RecipeTag
-              tagName={tag}
-              toggleTag={toggleTag}
-              selectedTags={selectedTags}
-              key={tag}
-            />
-          ))}
+          <span className="text-sm font-medium text-muted-foreground mr-2">
+            Tags:
+          </span>
+          {selectedTags.map((tag, index) => {
+            return (
+              <Badge key={index} variant="secondary" className="pr-1">
+                {tag}
+                <button
+                  onClick={() => {
+                    removeTag(tag);
+                  }}
+                  className="ml-1 hover:bg-destructive/20 rounded-full p-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            );
+          })}
         </div>
-        {filteredRecipes.slice(0, 5).map((recipe) => (
-          <AddRecipeDialogCard
+        {allRecipes?.slice(0, 12)
+          .map((recipe) =>
+              (((!!searchFilter && recipe.name.toLowerCase().includes(searchFilter)) ||
+                (!!searchFilter && recipe.ingredients.find((ing) =>
+                  ing.name.toLowerCase().startsWith(searchFilter)
+                )) ||
+                recipe.tags.find((tag) => selectedTags.includes(tag))) || (!searchFilter && selectedTags.length === 0) ) && (
+              <AddRecipeDialogCard
             key={recipe.id}
-            recipeId={recipe.id}
-            mealTime={mealTime}
-            day={day}
             addRecipe={() => { 
-              addRecipe(recipe.id, mealTime, day);
+              addRecipe({...recipe}, mealTime, day);
               handleOpenChange(false);
              }}
             title={recipe.name}
             servings={recipe.servings}
             prepTime={recipe.cookTime}
             ingredients={recipe.ingredients}
-          />
-        ))}
+          />              )
+          )}
       </DialogContent>
     </Dialog>
   );

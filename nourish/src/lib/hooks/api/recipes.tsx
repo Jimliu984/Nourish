@@ -83,6 +83,7 @@ function useMutationUpdateRecipe() {
         submitObj.tags = data.tags.join(",");
       }
       submitObj.id = id;
+      /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
       const { ingredients, instructions, tags, ...rest } = data;
       submitObj = {...submitObj, ...rest}
       const response = await fetch(`/api/recipes/${id}`, {

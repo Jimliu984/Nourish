@@ -1,28 +1,22 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Ingredient, Week } from "@/lib/types";
+import { Ingredient } from "@/lib/types";
 import { Clock, Users } from "lucide-react";
 import React from "react";
 
 type RecipeDialogCardProps = {
-  recipeId: number;
   title: string;
   prepTime: number;
   servings: number;
   ingredients: Ingredient[];
-  mealTime: "breakfast" | "lunch" | "dinner";
-  day: Week;
   addRecipe: () => void;
 };
 
 export default function AddRecipeDialogCard({
-  recipeId,
   title,
   prepTime,
   servings,
   ingredients,
-  mealTime,
-  day,
   addRecipe,
 } : RecipeDialogCardProps) {
 

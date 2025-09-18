@@ -2,13 +2,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Calendar, ChefHat, Plus, ShoppingCart } from "lucide-react";
+import { Calendar, ChefHat, Plus } from "lucide-react";
 import { useState } from "react";
 import ShoppingListDialog from "./ShoppingListDialog";
 import AddRecipeDialog from "./AddRecipeDialog";
-import ShowRecipeAdded from "./ShowRecipeAdded";
-import MealListItems from "./MealListItems";
-import { DailyMeals, Meal, Week, WeekPlan } from "@/lib/types";
+import MealListItem from "./MealListItem";
+import { ShoppingListRecipe, Week, WeekPlan } from "@/lib/types";
 import { getLastMondayDate } from "@/lib/helpers/dateHelper";
 const MEAL_TIMES : ("breakfast" | "lunch" | "dinner")[] = ["breakfast", "lunch", "dinner"];
 const DAYS : Week[] = [
@@ -23,7 +22,6 @@ const DAYS : Week[] = [
 
 export default function WeeklyPlanner() {
   const [showWeekend, setShowWeekend] = useState(true);
-  
   const [weekRecipe, setWeekRecipe] = useState<WeekPlan>({
     startDate : getLastMondayDate(),
     monday : { breakfast: [], lunch: [], dinner: [] },
@@ -36,37 +34,43 @@ export default function WeeklyPlanner() {
   })
 
   function addRecipe(
-    recipeId: number,
+    recipe: ShoppingListRecipe,
     mealTime: "breakfast" | "lunch" | "dinner",
     day: Week
   ) {
-    console.log(`${recipeId}, ${mealTime}, ${day}`)
-    setWeekRecipe(prev => {
-      const update = {...prev};
-      switch (day) {
-        case "monday":
-          update.monday[mealTime].push(recipeId);
-          break;
-        case "tuesday":
-          update.tuesday[mealTime].push(recipeId);
-          break;
-        case "wednesday":
-          update.wednesday[mealTime].push(recipeId);
-          break;
-        case "thursday":
-          update.thursday[mealTime].push(recipeId);
-          break;
-        case "friday":
-          update.friday[mealTime].push(recipeId);
-          break;
-        case "saturday":
-          update.saturday[mealTime].push(recipeId);
-          break;
-        case "sunday":
-          update.sunday[mealTime].push(recipeId);
-          break;
+    setWeekRecipe((prev) => {
+      const update : WeekPlan = {
+         startDate : prev.startDate,
+          monday : { breakfast: [...prev.monday.breakfast], lunch: [...prev.monday.lunch], dinner: [...prev.monday.dinner] },
+          tuesday : { breakfast: [...prev.tuesday.breakfast], lunch: [...prev.tuesday.lunch], dinner: [...prev.tuesday.dinner] },
+          wednesday : { breakfast: [...prev.wednesday.breakfast], lunch: [...prev.wednesday.lunch], dinner: [...prev.wednesday.dinner] },
+          thursday : { breakfast: [...prev.thursday.breakfast], lunch: [...prev.thursday.lunch], dinner: [...prev.thursday.dinner] },
+          friday : { breakfast: [...prev.friday.breakfast], lunch: [...prev.friday.lunch], dinner: [...prev.friday.dinner] },
+          saturday : { breakfast: [...prev.saturday.breakfast], lunch: [...prev.saturday.lunch], dinner: [...prev.saturday.dinner] },
+          sunday : { breakfast: [...prev.sunday.breakfast], lunch: [...prev.sunday.lunch], dinner: [...prev.sunday.dinner] },
       }
-      console.log(update)
+      update[day][mealTime].push(recipe);
+      return update;
+    });
+  }
+
+  function removeRecipe(
+    day: Week,
+    mealType: "breakfast" | "lunch" | "dinner",
+    recipeName: string,
+  ) {
+    setWeekRecipe((prev) => {
+      const update : WeekPlan = {
+         startDate : prev.startDate,
+          monday : { breakfast: [...prev.monday.breakfast], lunch: [...prev.monday.lunch], dinner: [...prev.monday.dinner] },
+          tuesday : { breakfast: [...prev.tuesday.breakfast], lunch: [...prev.tuesday.lunch], dinner: [...prev.tuesday.dinner] },
+          wednesday : { breakfast: [...prev.wednesday.breakfast], lunch: [...prev.wednesday.lunch], dinner: [...prev.wednesday.dinner] },
+          thursday : { breakfast: [...prev.thursday.breakfast], lunch: [...prev.thursday.lunch], dinner: [...prev.thursday.dinner] },
+          friday : { breakfast: [...prev.friday.breakfast], lunch: [...prev.friday.lunch], dinner: [...prev.friday.dinner] },
+          saturday : { breakfast: [...prev.saturday.breakfast], lunch: [...prev.saturday.lunch], dinner: [...prev.saturday.dinner] },
+          sunday : { breakfast: [...prev.sunday.breakfast], lunch: [...prev.sunday.lunch], dinner: [...prev.sunday.dinner] },
+      }
+      update[day][mealType] = update[day][mealType].filter((r) => r.name.toLowerCase() !== recipeName.toLowerCase());
       return update;
     });
   }
@@ -87,7 +91,7 @@ export default function WeeklyPlanner() {
         >
           {showWeekend ? "Hide Weekend" : "Show Weekend"}
         </Button>
-        <ShoppingListDialog />
+        <ShoppingListDialog weekPlan={weekRecipe} />
         </div>
       </div>
       <div className="space-y-6">
@@ -153,11 +157,11 @@ export default function WeeklyPlanner() {
                           </div>
                         </AddRecipeDialog>
                       </div>
-                      {weekRecipe[day][mealTime].map((item, index) => 
+                      {weekRecipe[day][mealTime].map((recipe, index) => 
                        ( <div key={index} className="min-h-[80px] w-100 p-4 bg-meal-slot border border-border/30 rounded-xl transition-colors hover:bg-meal-slot/80">
                           <div className="flex items-center justify-center h-full text-muted-foreground">
                             <div className="flex flex-col items-center gap-2 text-center">
-                              <MealListItems meals={[{id: "1", name: "Sample Meal", type: "breakfast"}] as Meal[]} day={day} mealType={"breakfast"} removeMeal={() => {}} />
+                              <MealListItem recipeName={recipe.name} day={day} mealType={mealTime} removeMeal={removeRecipe} />
                             </div>
                           </div>
                         </div>)

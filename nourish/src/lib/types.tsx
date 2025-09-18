@@ -37,10 +37,16 @@ interface Recipe {
   isFavorite: boolean;
 }
 
+interface ShoppingListRecipe {
+  id: number;
+  name: string;
+  ingredients: Ingredient[];
+}
+
 interface DailyMeals {
-  breakfast: number[];
-  lunch: number[];
-  dinner: number[];
+  breakfast: ShoppingListRecipe[];
+  lunch: ShoppingListRecipe[];
+  dinner: ShoppingListRecipe[];
 }
 
 interface WeekPlan {
@@ -78,4 +84,4 @@ type RecipeFormValues = {
   tags: string[];
   isFavorite: boolean;
 };
-export type { Meal, MealType, DayMeals, DailyMeals, RecipeOverview, Recipe, Ingredient, WeekPlan, Week, RecipeFormValues };
+export type { Meal, MealType, DayMeals, DailyMeals, RecipeOverview, Recipe, Ingredient, WeekPlan, Week, RecipeFormValues, ShoppingListRecipe };
