@@ -36,11 +36,13 @@ export default function AddRecipeDialog({
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [searchFilter, setSearchFilter] = useState<string>("");
   const [showTagSuggestions, setShowTagSuggestions] = useState(false);
-  const suggestedTags = ALL_TAGS.filter(tag => 
-    tag.toLowerCase().includes(searchFilter.toLowerCase()) && 
-    !selectedTags.includes(tag) &&
-    searchFilter.trim().length > 0
+  const suggestedTags = ALL_TAGS.filter(
+    (tag) =>
+      tag.toLowerCase().includes(searchFilter.toLowerCase()) &&
+      !selectedTags.includes(tag) &&
+      searchFilter.trim().length > 0
   );
+  const [genimiPrompt, setGeminiPrompt] = useState<string>("");
   function handleOpenChange(open: boolean) {
     setIsOpen(open);
   }
@@ -53,7 +55,7 @@ export default function AddRecipeDialog({
     });
     setSearchFilter("");
     setShowTagSuggestions(false);
-  };
+  }
   function removeTag(tag: string) {
     setSelectedTags((prev) => {
       return prev.filter((t) => t !== tag);
@@ -82,7 +84,7 @@ export default function AddRecipeDialog({
           />
         </div>
         <div>
-        {showTagSuggestions && (
+          {showTagSuggestions && (
             <div className="top-full left-0 right-0 mt-1 bg-popover border rounded-md shadow-lg z-50 max-h-[200px] overflow-y-auto">
               <div className="p-2 border-b bg-muted/50">
                 <span className="text-xs text-muted-foreground font-medium">
@@ -107,7 +109,7 @@ export default function AddRecipeDialog({
               )}
             </div>
           )}
-          </div>
+        </div>
         <div className="flex flex-wrap gap-2">
           <span className="text-sm font-medium text-muted-foreground mr-2">
             Tags:
@@ -128,25 +130,29 @@ export default function AddRecipeDialog({
             );
           })}
         </div>
-        {allRecipes?.slice(0, 12)
-          .map((recipe) =>
-              (((!!searchFilter && recipe.name.toLowerCase().includes(searchFilter)) ||
-                (!!searchFilter && recipe.ingredients.find((ing) =>
+        {allRecipes?.slice(0, 12).map(
+          (recipe) =>
+            ((!!searchFilter &&
+              recipe.name.toLowerCase().includes(searchFilter)) ||
+              (!!searchFilter &&
+                recipe.ingredients.find((ing) =>
                   ing.name.toLowerCase().startsWith(searchFilter)
                 )) ||
-                recipe.tags.find((tag) => selectedTags.includes(tag))) || (!searchFilter && selectedTags.length === 0) ) && (
+              recipe.tags.find((tag) => selectedTags.includes(tag)) ||
+              (!searchFilter && selectedTags.length === 0)) && (
               <AddRecipeDialogCard
-            key={recipe.id}
-            addRecipe={() => { 
-              addRecipe({...recipe}, mealTime, day);
-              handleOpenChange(false);
-             }}
-            title={recipe.name}
-            servings={recipe.servings}
-            prepTime={recipe.cookTime}
-            ingredients={recipe.ingredients}
-          />              )
-          )}
+                key={recipe.id}
+                addRecipe={() => {
+                  addRecipe({ ...recipe }, mealTime, day);
+                  handleOpenChange(false);
+                }}
+                title={recipe.name}
+                servings={recipe.servings}
+                prepTime={recipe.cookTime}
+                ingredients={recipe.ingredients}
+              />
+            )
+        )}
       </DialogContent>
     </Dialog>
   );

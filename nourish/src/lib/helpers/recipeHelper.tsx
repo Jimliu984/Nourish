@@ -15,7 +15,7 @@ const meals: ("breakfast" | "lunch" | "dinner")[] = [
   "dinner",
 ];
 export function extractAllIngredientsFromWeekPlan(weekPlan: WeekPlan) {
-  let allIngredients = new Map<string, string[]>();
+  const allIngredients = new Map<string, string[]>();
   meals.map((mealType) => {
     days.map((day) => {
       const recipes = weekPlan[day][mealType];
@@ -34,7 +34,7 @@ export function extractAllIngredientsFromWeekPlan(weekPlan: WeekPlan) {
 }
 
 export function extractIngredientsPerRecipeFromWeekPlan(weekPlan: WeekPlan) {
-  let allIngredients = new Map<number, [ShoppingListRecipe, number]>();
+  const allIngredients = new Map<number, [ShoppingListRecipe, number]>();
   meals.map((mealType) => {
     days.map((day) => {
       const recipes = weekPlan[day][mealType];

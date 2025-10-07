@@ -32,6 +32,7 @@ import { Ingredient, RecipeFormValues } from "@/lib/types";
 import { ALL_TAGS } from "@/lib/tags";
 import { useMutationCreateRecipe } from "@/lib/hooks/api/recipes";
 import { useQueryClient } from "@tanstack/react-query";
+import { suggestTags } from "@/lib/helpers/prompts/recipePrompts";
 
 export default function AddNewRecipeDialog() {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,6 +76,14 @@ function AddNewRecipeForm({
       isFavorite: false,
     },
   });
+  function askGemini() {
+    console.log("Asked")
+    async function dothis() {
+      const response =  await suggestTags(form.getValues("name"), form.getValues("ingredients"));
+      console.log(response);
+    }
+   dothis()
+  }
   const ingredients = form.watch("ingredients");
   const instructions = form.watch("instructions");
   const tags = form.watch("tags");
@@ -299,6 +308,9 @@ function AddNewRecipeForm({
           </div>
         </form>
       </Form>
+      <div>
+        <Button onClick={askGemini}>Ask Gemini</Button>
+      </div>
     </>
   );
 }
