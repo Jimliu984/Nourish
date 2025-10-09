@@ -28,9 +28,8 @@ export async function POST(req: Request) {
   if (part?.functionCall) {
     console.log("Using tool:", part.functionCall.name);
     const { name, args } = part.functionCall;
-    let toolResult: any;
 
-    toolResult = await UseTool(name, args);
+    const toolResult = await UseTool(name, args);
     if (toolResult.navigateToRecipe) {
       console.log("Navigating to", toolResult.navigateToRecipe);
       return NextResponse.redirect(new URL(`${process.env.NEXT_PUBLIC_ROOT_URL}/recipes${toolResult.navigateToRecipe}`));
