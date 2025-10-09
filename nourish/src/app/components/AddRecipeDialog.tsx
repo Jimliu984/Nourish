@@ -42,7 +42,7 @@ export default function AddRecipeDialog({
       !selectedTags.includes(tag) &&
       searchFilter.trim().length > 0
   );
-  const [genimiPrompt, setGeminiPrompt] = useState<string>("");
+  
   function handleOpenChange(open: boolean) {
     setIsOpen(open);
   }

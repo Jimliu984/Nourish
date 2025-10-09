@@ -2,9 +2,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { sendPrompt } from "@/lib/helpers/prompts/aiChatPrompts";
+import { sendPrompt } from "@/lib/helpers/ai/prompts/aiChatPrompts";
 import { MessageCircle, Send, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ChatPopup() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +12,10 @@ export default function ChatPopup() {
   const [messages, setMessages] = useState<
     Array<{ role: "user" | "assistant"; content: string }>
   >([]);
+  const bottomRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages]) 
 
   const handleSend = () => {
     if (!message.trim()) return;
@@ -22,15 +26,12 @@ export default function ChatPopup() {
         setMessages((prev) => [...prev, { role: "assistant", content: response }]);
     }
     send();
-
-    // AI integration will go here later
   };
 
   return (
     <>
       {isOpen && (
         <div className="fixed bottom-24 right-6 w-96 h-[500px] bg-card border border-border rounded-lg shadow-lg flex flex-col overflow-hidden z-50 animate-in slide-in-from-bottom-4 fade-in">
-          {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-border bg-muted/50">
             <div className="flex items-center gap-2">
               <MessageCircle className="w-5 h-5 text-primary" />
@@ -71,6 +72,7 @@ export default function ChatPopup() {
                     </div>
                   </div>
                 ))}
+                <div ref={bottomRef} />
               </div>
             )}
           </ScrollArea>

@@ -90,7 +90,7 @@ export default function ShoppingListDialog({
                 .entries()
                 .toArray()
                 .map(([recipeId, [recipe, count]]) => (
-                  <Card key={recipe.name} className="p-4">
+                  <Card key={`${recipeId}-${recipe.name}`} className="p-4">
                     <div className="flex items-center justify-between gap-2 mb-1">
                       <div className="flex items-center gap-2">
                         <ChefHat className="h-4 w-4 text-primary" />

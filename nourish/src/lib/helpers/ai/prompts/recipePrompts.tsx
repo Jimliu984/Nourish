@@ -1,4 +1,3 @@
-import { ALL_TAGS } from "@/lib/tags";
 import { Ingredient } from "@/lib/types";
 import { askGemini } from "../aifun";
 

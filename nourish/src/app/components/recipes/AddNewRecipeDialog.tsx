@@ -32,7 +32,7 @@ import { Ingredient, RecipeFormValues } from "@/lib/types";
 import { ALL_TAGS } from "@/lib/tags";
 import { useMutationCreateRecipe } from "@/lib/hooks/api/recipes";
 import { useQueryClient } from "@tanstack/react-query";
-import { suggestTags } from "@/lib/helpers/prompts/recipePrompts";
+import { suggestTags } from "@/lib/helpers/ai/prompts/recipePrompts";
 
 export default function AddNewRecipeDialog() {
   const [isOpen, setIsOpen] = useState(false);
