@@ -4,6 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "@/lib/QueryWrapper";
+import ChatPopup from "./components/ai-textbox/ChatPopup";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,6 +57,7 @@ export default function RootLayout({
           </header>
           <Toaster />
           {children}
+          <ChatPopup />
         </Providers>
       </body>
     </html>

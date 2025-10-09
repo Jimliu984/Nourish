@@ -26,7 +26,7 @@ export async function talkToGemini(prompt : string) {
 }
 
 export async function askGemini(prompt: string) {
-  const res = await fetch("/api/gemini", {
+  const res = await fetch("/api/gemini-chat", {
     method: "POST",
     body: JSON.stringify({ prompt }),
     headers: { "Content-Type": "application/json" },
