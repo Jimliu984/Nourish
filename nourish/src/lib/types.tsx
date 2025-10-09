@@ -70,7 +70,6 @@ type Week =
   | "friday"
   | "saturday"
   | "sunday";
-  
 
 type RecipeFormValues = {
   name: string;
@@ -84,4 +83,21 @@ type RecipeFormValues = {
   tags: string[];
   isFavorite: boolean;
 };
-export type { Meal, MealType, DayMeals, DailyMeals, RecipeOverview, Recipe, Ingredient, WeekPlan, Week, RecipeFormValues, ShoppingListRecipe };
+type AiMessage = {
+  role: "user" | "model";
+  content: string;
+}
+export type {
+  Meal,
+  MealType,
+  DayMeals,
+  DailyMeals,
+  RecipeOverview,
+  Recipe,
+  Ingredient,
+  WeekPlan,
+  Week,
+  RecipeFormValues,
+  ShoppingListRecipe,
+  AiMessage,
+};

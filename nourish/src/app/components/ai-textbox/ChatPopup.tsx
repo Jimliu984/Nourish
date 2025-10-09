@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { sendPrompt } from "@/lib/helpers/ai/prompts/aiChatPrompts";
+import { AiMessage } from "@/lib/types";
 import { MessageCircle, Send, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -10,7 +11,7 @@ export default function ChatPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<
-    Array<{ role: "user" | "assistant"; content: string }>
+    Array<AiMessage>
   >([]);
   const bottomRef = useRef<HTMLDivElement | null>(null)
   useEffect(() => {
@@ -22,8 +23,8 @@ export default function ChatPopup() {
     setMessages((prev) => [...prev, { role: "user", content: message }]);
     async function send() {
         setMessage("");
-        const response = await sendPrompt(message);
-        setMessages((prev) => [...prev, { role: "assistant", content: response }]);
+        const response = await sendPrompt(message, messages.map(msg => ({role: msg.role, content: msg.content})));
+        setMessages((prev) => [...prev, { role: "model", content: response }]);
     }
     send();
   };
