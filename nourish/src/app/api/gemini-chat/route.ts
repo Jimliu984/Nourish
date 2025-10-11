@@ -65,6 +65,7 @@ async function fetchAllRecipes() {
 }
 
 async function UseTool(name: string, args: any) {
+    let allRecipes : Recipe[] = [];
     switch (name) {
         case "getAllTags":
             return { allTags: ALL_TAGS };
@@ -79,18 +80,38 @@ async function UseTool(name: string, args: any) {
         case "getFilteredRecipeById":
             const { recipeId } = args as { recipeId: number };
             console.log("Getting recipe by ID", recipeId);
-            const allRecipes = await fetchAllRecipes();
+            allRecipes = await fetchAllRecipes();
             return { recipe: allRecipes.find((recipe) => recipe.id === recipeId) ?? null };
         case "getFilteredRecipeByName":
             const { recipeName } = args as { recipeName: string };
             console.log("Getting recipe by name", recipeName);
-            const allRecipes2 = await fetchAllRecipes();
-            return { recipe: allRecipes2.find((recipe) => recipe.name.toLowerCase() === recipeName.toLowerCase()) ?? null };
+            allRecipes = await fetchAllRecipes();
+            return { recipe: allRecipes.find((recipe) => recipe.name.toLowerCase() === recipeName.toLowerCase()) ?? null };
+        case "getRecipeIngredients":
+            const { recipeName: recipeNameForIngs } = args as { recipeName: string };
+            console.log("Getting recipe ingredients by name", recipeNameForIngs);
+            allRecipes = await fetchAllRecipes();
+            return { ingredients: allRecipes.find((recipe) => recipe.name === recipeNameForIngs)?.ingredients ?? [] };
+          case "getRecipeInstructions":
+            const { recipeName: recipeNameForInstructions } = args as { recipeName: string };
+            console.log("Getting recipe instructions by name", recipeNameForInstructions);
+            allRecipes = await fetchAllRecipes();
+            return { instructions: allRecipes.find((recipe) => recipe.name === recipeNameForInstructions)?.instructions ?? [] };
+        case "getRecipeTags":
+            const { recipeName: recipeNameForTags } = args as { recipeName: string };
+            console.log("Getting recipe tags by name", recipeNameForTags);
+            allRecipes = await fetchAllRecipes();
+            return { tags: allRecipes.find((recipe) => recipe.name === recipeNameForTags)?.tags ?? [] };
+          case "getRecipeDescription":
+            const { recipeName: recipeNameForDescription } = args as { recipeName: string };
+            console.log("Getting recipe description by name", recipeNameForDescription);
+            allRecipes = await fetchAllRecipes();
+            return { description: allRecipes.find((recipe) => recipe.name === recipeNameForDescription)?.description ?? "" };
         case "navigateToRecipe":
             const { recipeNameToNavigate } = args as { recipeNameToNavigate: string };
             console.log("Getting recipe to navigate to", recipeNameToNavigate);
-            const allRecipes3 = await fetchAllRecipes();
-            const recipe = allRecipes3.find((recipe) => recipe.name.toLowerCase() === recipeNameToNavigate.toLowerCase());
+            allRecipes = await fetchAllRecipes();
+            const recipe = allRecipes.find((recipe) => recipe.name.toLowerCase() === recipeNameToNavigate.toLowerCase());
             if (recipe) {
                 const urlName = `/${recipe.id}-${recipe.name.toLowerCase().split(" ").join("-")}`;
                 return { navigateToRecipe: urlName};

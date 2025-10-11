@@ -5,7 +5,7 @@ const AI_TOOLS : Tool[] = [
     functionDeclarations: [
       {
         name: "getAllTags",
-        description: "Gets all recipe tags used in the website",
+        description: "Gets all recipe tags used in the website. It does not return any recipes, just the tags.",
         parameters: {
           type: SchemaType.OBJECT,
           properties: {},
@@ -63,6 +63,62 @@ const AI_TOOLS : Tool[] = [
         name: "getFilteredRecipeByName",
         description:
           "Gets the recipe with the specified name",
+        parameters: {
+          type: SchemaType.OBJECT,
+          properties: {
+            "recipeName" : {
+                type: SchemaType.STRING,
+            }
+          },
+          required: ["recipeName"],
+        },
+      },
+      {
+        name: "getRecipeIngredients",
+        description:
+          "Gets the ingredients for the recipe with the specified name",
+        parameters: {
+          type: SchemaType.OBJECT,
+          properties: {
+            "recipeName" : {
+                type: SchemaType.STRING,
+            }
+          },
+          required: ["recipeName"],
+        },
+      },
+      {
+        name: "getRecipeTags",
+        description:
+          "Gets the tags for the recipe with the specified name",
+        parameters: {
+          type: SchemaType.OBJECT,
+          properties: {
+            "recipeName" : {
+                type: SchemaType.STRING,
+            }
+          },
+          required: ["recipeName"],
+        },
+      },
+      {
+        name: "getRecipeInstructions",
+        description:
+          "Gets the instructions for the recipe with the specified name",
+        parameters: {
+          type: SchemaType.OBJECT,
+          properties: {
+            "recipeName" : {
+                type: SchemaType.STRING,
+            }
+          },
+          required: ["recipeName"],
+        },
+      },
+      {
+        name: "getRecipeDescription",
+        description:
+          "Gets the description for the recipe with the specified name",
         parameters: {
           type: SchemaType.OBJECT,
           properties: {
