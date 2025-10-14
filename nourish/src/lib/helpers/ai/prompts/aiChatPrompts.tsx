@@ -9,6 +9,7 @@ const systemPrompt =
   "If the user asks for a specific recipe, use the tools to find that recipe by name." +
   "If the user asks for ingredients, instructions or tags of a specific recipe, use the tools to get that information by recipe name." +
   "If the user asks for you to choose a recipe, try and search for all recipes and pick the best one based on any given criteria." +
+  "If the user asks for the recipe page or to view the recipe, navigate to the recipe page using the tool provided." +
   "Return your response in plain text. Do not include any HTML or markdown formatting. Use simple commas for a list of items and numbers for instructions." + 
   "Remember to search through the tags if the user asks for recipe suggestions based on certain criteria.";
 

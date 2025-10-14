@@ -5,7 +5,7 @@ const AI_TOOLS : Tool[] = [
     functionDeclarations: [
       {
         name: "getAllTags",
-        description: "Gets all recipe tags used in the website. It does not return any recipes, just the tags.",
+        description: "Gets all recipe tags used in the website. It does not return any recipes, just the tags. Only call when asked about what tags there are.",
         parameters: {
           type: SchemaType.OBJECT,
           properties: {},

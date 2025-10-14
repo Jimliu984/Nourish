@@ -1,2 +1,3 @@
 # Nourish
-Nourish is a project to help better organise and help plan meals with less hassle and decision making
+Nourish is a recipe web app that helps plan weekly meals.
+![alt text](<Initial UI Ideas/Screenshot 2025-08-13 at 00.09.30.png>)

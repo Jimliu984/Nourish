@@ -76,7 +76,7 @@ async function UseTool(name: string, args: any) {
         case "getFilteredRecipesByTags":
             const { tags } = args as { tags: string[] };
             console.log("Getting recipes by tags", tags);
-            return { allRecipes: (await fetchAllRecipes()).filter((recipe) => recipe.tags.some((tag) => tags.includes(tag))) };
+            return { allRecipes: (await fetchAllRecipes()).filter((recipe) => recipe.tags.some((tag) => tags.includes(tag.toLowerCase()))) };
         case "getFilteredRecipeById":
             const { recipeId } = args as { recipeId: number };
             console.log("Getting recipe by ID", recipeId);
@@ -91,22 +91,22 @@ async function UseTool(name: string, args: any) {
             const { recipeName: recipeNameForIngs } = args as { recipeName: string };
             console.log("Getting recipe ingredients by name", recipeNameForIngs);
             allRecipes = await fetchAllRecipes();
-            return { ingredients: allRecipes.find((recipe) => recipe.name === recipeNameForIngs)?.ingredients ?? [] };
+            return { ingredients: allRecipes.find((recipe) => recipe.name.toLowerCase() === recipeNameForIngs.toLowerCase())?.ingredients ?? [] };
           case "getRecipeInstructions":
             const { recipeName: recipeNameForInstructions } = args as { recipeName: string };
             console.log("Getting recipe instructions by name", recipeNameForInstructions);
             allRecipes = await fetchAllRecipes();
-            return { instructions: allRecipes.find((recipe) => recipe.name === recipeNameForInstructions)?.instructions ?? [] };
+            return { instructions: allRecipes.find((recipe) => recipe.name.toLowerCase() === recipeNameForInstructions.toLowerCase())?.instructions ?? [] };
         case "getRecipeTags":
             const { recipeName: recipeNameForTags } = args as { recipeName: string };
             console.log("Getting recipe tags by name", recipeNameForTags);
             allRecipes = await fetchAllRecipes();
-            return { tags: allRecipes.find((recipe) => recipe.name === recipeNameForTags)?.tags ?? [] };
+            return { tags: allRecipes.find((recipe) => recipe.name.toLowerCase() === recipeNameForTags.toLowerCase())?.tags ?? [] };
           case "getRecipeDescription":
             const { recipeName: recipeNameForDescription } = args as { recipeName: string };
             console.log("Getting recipe description by name", recipeNameForDescription);
             allRecipes = await fetchAllRecipes();
-            return { description: allRecipes.find((recipe) => recipe.name === recipeNameForDescription)?.description ?? "" };
+            return { description: allRecipes.find((recipe) => recipe.name.toLowerCase() === recipeNameForDescription.toLowerCase())?.description ?? "" };
         case "navigateToRecipe":
             const { recipeNameToNavigate } = args as { recipeNameToNavigate: string };
             console.log("Getting recipe to navigate to", recipeNameToNavigate);
