@@ -46,6 +46,24 @@ const AI_TOOLS : Tool[] = [
         },
       },
       {
+        name: "getFilteredRecipesByIngredients",
+        description:
+          "Gets all recipes that match ALL of the given ingredients (returns recipes that have all the ingredients specified)",
+        parameters: {
+          type: SchemaType.OBJECT,
+          properties: {
+            "ingredients" : {
+                type: SchemaType.ARRAY,
+                items: {
+                    type: SchemaType.STRING,
+                },
+            }
+          },
+          description: "Array of ingredients to filter recipes by",
+          required: ["ingredients"],
+        },
+      },
+      {
         name: "getFilteredRecipeById",
         description:
           "Gets the recipe with the specified ID",
