@@ -304,7 +304,7 @@ function EditNewRecipeForm({
             >
               Cancel
             </Button>
-            <Button type="submit">Add Recipe</Button>
+            <Button type="submit">{duplicate ? "Add Recipe" : "Save Recipe"}</Button>
           </div>
         </form>
       </Form>

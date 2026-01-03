@@ -42,7 +42,7 @@ export default function AddRecipeDialog({
       !selectedTags.includes(tag) &&
       searchFilter.trim().length > 0
   );
-  
+
   function handleOpenChange(open: boolean) {
     setIsOpen(open);
   }
@@ -130,29 +130,31 @@ export default function AddRecipeDialog({
             );
           })}
         </div>
-        {allRecipes?.slice(0, 12).map(
-          (recipe) =>
-            ((!!searchFilter &&
+        {allRecipes
+          ?.filter((recipe) => {
+            return (!!searchFilter &&
               recipe.name.toLowerCase().includes(searchFilter)) ||
               (!!searchFilter &&
                 recipe.ingredients.find((ing) =>
                   ing.name.toLowerCase().startsWith(searchFilter)
                 )) ||
               recipe.tags.find((tag) => selectedTags.includes(tag)) ||
-              (!searchFilter && selectedTags.length === 0)) && (
-              <AddRecipeDialogCard
-                key={recipe.id}
-                addRecipe={() => {
-                  addRecipe({ ...recipe }, mealTime, day);
-                  handleOpenChange(false);
-                }}
-                title={recipe.name}
-                servings={recipe.servings}
-                prepTime={recipe.cookTime}
-                ingredients={recipe.ingredients}
-              />
-            )
-        )}
+              (!searchFilter && selectedTags.length === 0);
+          })
+          .slice(0, 12)
+          .map((recipe) => (
+            <AddRecipeDialogCard
+              key={recipe.id}
+              addRecipe={() => {
+                addRecipe({ ...recipe }, mealTime, day);
+                handleOpenChange(false);
+              }}
+              title={recipe.name}
+              servings={recipe.servings}
+              prepTime={recipe.cookTime}
+              ingredients={recipe.ingredients}
+            />
+          ))}
       </DialogContent>
     </Dialog>
   );
